@@ -1,5 +1,7 @@
 # `promptc-go`
 
+**English** | [简体中文](README-zh.md)
+
 `promptc-go` is a go implementation of `promptc`. It uses
 `promptc` specification to generate prompts.
 
@@ -40,6 +42,8 @@ prompts: [
 
 #### Type
 
+Current `promptc-go` supports `string`, `int`, `float` types.
+
 ```ts
 // declare a variable
 myName : string { minLen: 3, maxLen: 10, default: "John" }
@@ -57,8 +61,6 @@ thisPrice : float { min: 0.01, default: '0.01' }
 // with default value 0.01
 // min value 0.01, and unlimited max value
 ```
-
-Current `promptc-go` supports `string`, `int`, `float` types.
 
 #### Constraint
 
