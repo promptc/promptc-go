@@ -15,6 +15,9 @@ MM {{}} {{{x}}} {%
 	if (x > 0) { return "no" }
 	return "yes"
 %}
+ {{%xx%}}
+{{
+{{ x}}}}
 `
 	block := Block{
 		text: text,
