@@ -1,32 +1,11 @@
 package variable
 
 import (
-	"fmt"
 	"github.com/hjson/hjson-go/v4"
 	"github.com/promptc/promptc-go/variable/interfaces"
 	"github.com/promptc/promptc-go/variable/types"
 	"strings"
 )
-
-func reservedType(name, val string) interfaces.Variable {
-	var v interfaces.Variable = nil
-	var c interfaces.Constraint = nil
-	var err error
-	switch name {
-	case "_conf":
-		v = &types.ConfigType{}
-		c = &types.ConfigConstraint{}
-		err = hjson.Unmarshal([]byte(val), c)
-	}
-	if err != nil {
-		fmt.Printf("Error parsing %s: %s\n", name, err)
-		return nil
-	}
-	if v != nil {
-		v.SetConstraint(c)
-	}
-	return v
-}
 
 func Parse(singleLine string) interfaces.Variable {
 	nameAndTail := strings.SplitN(singleLine, ":", 2)
@@ -34,12 +13,11 @@ func Parse(singleLine string) interfaces.Variable {
 		return nil
 	}
 	name := strings.TrimSpace(nameAndTail[0])
-	rev := reservedType(name, nameAndTail[1])
-	if rev != nil {
-		return rev
-	}
+	return ParseKeyValue(name, nameAndTail[1])
+}
 
-	typeAndTail := strings.SplitN(nameAndTail[1], "{", 2)
+func ParseKeyValue(name, tail string) interfaces.Variable {
+	typeAndTail := strings.SplitN(tail, "{", 2)
 	vType := strings.TrimSpace(typeAndTail[0])
 	cons := ""
 	if len(typeAndTail) == 2 {
