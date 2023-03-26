@@ -1,16 +1,16 @@
 package types
 
 import (
-	"github.com/promptc/promptc-go/variable"
+	"github.com/promptc/promptc-go/variable/interfaces"
 	"strconv"
 )
 
 type FloatConstraint struct {
-	Min float64
-	Max float64
+	Min float64 `json:"min"`
+	Max float64 `json:"max"`
 }
 
-func (i FloatConstraint) CanFit(v string) bool {
+func (i *FloatConstraint) CanFit(v string) bool {
 	i2, err := strconv.ParseFloat(v, 64)
 	if err != nil {
 		return false
@@ -24,4 +24,4 @@ func (i FloatConstraint) CanFit(v string) bool {
 	return true
 }
 
-var _ variable.Constraint = FloatConstraint{}
+var _ interfaces.Constraint = &FloatConstraint{}

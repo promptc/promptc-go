@@ -2,7 +2,7 @@ package types
 
 import (
 	"fmt"
-	"github.com/promptc/promptc-go/variable"
+	"github.com/promptc/promptc-go/variable/interfaces"
 	"strconv"
 )
 
@@ -10,17 +10,17 @@ type FloatType struct {
 	value      float64
 	hasVal     bool
 	name       string
-	constraint FloatConstraint
+	constraint interfaces.Constraint
 }
 
-func (i FloatType) Value() string {
+func (i *FloatType) Value() string {
 	if i.hasVal {
 		return fmt.Sprintf("%.2f", i.value)
 	}
 	return ""
 }
 
-func (i FloatType) SetValue(s string) bool {
+func (i *FloatType) SetValue(s string) bool {
 	if !i.constraint.CanFit(s) {
 		return false
 	}
@@ -30,16 +30,30 @@ func (i FloatType) SetValue(s string) bool {
 	return true
 }
 
-func (i FloatType) HasValue() bool {
+func (i *FloatType) HasValue() bool {
 	return i.hasVal
 }
 
-func (i FloatType) Type() string {
+func (i *FloatType) Type() string {
 	return "float"
 }
 
-func (i FloatType) Name() string {
+func (i *FloatType) Name() string {
 	return i.name
 }
 
-var _ variable.Variable = FloatType{}
+func (i *FloatType) Constraint() interfaces.Constraint {
+	return i.constraint
+}
+
+func (i *FloatType) SetConstraint(c interfaces.Constraint) {
+	i.constraint = c
+}
+
+var _ interfaces.Variable = &FloatType{}
+
+func NewFloat(name string) *FloatType {
+	return &FloatType{
+		name: name,
+	}
+}

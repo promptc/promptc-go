@@ -1,4 +1,4 @@
-package variable
+package interfaces
 
 type Variable interface {
 	Type() string
@@ -6,6 +6,8 @@ type Variable interface {
 	Value() string
 	SetValue(string) bool
 	HasValue() bool
+	Constraint() Constraint
+	SetConstraint(Constraint)
 }
 
 type Constraint interface {

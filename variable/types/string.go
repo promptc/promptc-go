@@ -1,19 +1,21 @@
 package types
 
-import "github.com/promptc/promptc-go/variable"
+import (
+	"github.com/promptc/promptc-go/variable/interfaces"
+)
 
 type StringType struct {
 	name       string
-	constraint StringConstraint
+	constraint interfaces.Constraint
 	value      string
 	hasVal     bool
 }
 
-func (s StringType) Value() string {
+func (s *StringType) Value() string {
 	return s.value
 }
 
-func (s StringType) SetValue(s2 string) bool {
+func (s *StringType) SetValue(s2 string) bool {
 	if s.constraint.CanFit(s2) {
 		s.value = s2
 		s.hasVal = true
@@ -22,16 +24,30 @@ func (s StringType) SetValue(s2 string) bool {
 	return false
 }
 
-func (s StringType) HasValue() bool {
+func (s *StringType) HasValue() bool {
 	return s.hasVal
 }
 
-func (s StringType) Type() string {
+func (s *StringType) Type() string {
 	return "string"
 }
 
-func (s StringType) Name() string {
+func (s *StringType) Name() string {
 	return s.name
 }
 
-var _ variable.Variable = StringType{}
+func (s *StringType) Constraint() interfaces.Constraint {
+	return s.constraint
+}
+
+func (s *StringType) SetConstraint(c interfaces.Constraint) {
+	s.constraint = c
+}
+
+var _ interfaces.Variable = &StringType{}
+
+func NewString(name string) *StringType {
+	return &StringType{
+		name: name,
+	}
+}
