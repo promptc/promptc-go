@@ -72,6 +72,7 @@ Current `promptc-go` supports `string`, `int`, `float` types.
 ### Prompt
 
 ```py
+{role: 'user'}
 xx{x} {{x}} {%
     if (x > 12) {
         result = "good";
@@ -96,6 +97,22 @@ Show me more about {x}
 If you want to provide empty extra info, use `{}` as your first line is extremely recommended.
 Although it's not required, because once hjson parse failed, the `promptc` will prepend first
 line to your prompt, but it might cause plenty of undefined behaviour.
+
+#### Reserved Value
+
+We reserved `{%Q%}` for `'''` which cannot be easy done in multiline text syntax of hjson.
+
+e.g.
+
+```py
+This is reserved {%Q%} {{%Q%}}
+```
+
+Will be compiled to
+
+```py
+This is reserved ''' {%Q%}
+```
 
 #### JavaScript in Prompt
 
