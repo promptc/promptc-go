@@ -66,12 +66,14 @@ func (b *Block) Parse() *ParsedBlock {
 				}
 				isOpen = false
 				name := strings.TrimSpace(sb.String())
+				sb.Reset()
 				if kind == BlockTokenKindScript {
 					name = strings.Trim(name, "%")
 					name = strings.TrimSpace(name)
+				} else {
+					varList = append(varList, name)
 				}
-				sb.Reset()
-				varList = append(varList, name)
+
 				tokens = append(tokens, BlockToken{name, kind})
 				r = 0
 				goto nextStep

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/promptc/promptc-go/cli/oper/cfg"
+	"github.com/promptc/promptc-go/cli/oper/compile"
 	"github.com/promptc/promptc-go/cli/oper/help"
 	"github.com/promptc/promptc-go/cli/oper/run"
 	"github.com/promptc/promptc-go/cli/oper/shared"
@@ -28,6 +29,10 @@ func main() {
 		handler = cfg.ShowHandler
 	case "run":
 		handler = run.RunHandler
+	case "compile":
+		handler = compile.CompileHandler
+	case "analyse":
+		handler = compile.AnalyseHandler
 	}
 	if handler == nil {
 		help.HelpHandler(args)
