@@ -1,6 +1,7 @@
-# `promptc-go`
-
-[English](README.md) | **简体中文**
+<h1 align="center">⚙️ promptc-go</h1>
+<p align="center">
+  [ <a href="README.md">English</a> | <strong>简体中文</strong> ]
+</p>
 
 `promptc-go` 是 `promptc` 的 Go 语言实现，其使用
 `promptc` 的标准以生成，解析，编译和执行 `promptc` 文件。

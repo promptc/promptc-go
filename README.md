@@ -1,6 +1,7 @@
-# `promptc-go`
-
-**English** | [简体中文](README-zh.md)
+<h1 align="center">⚙️ promptc-go</h1>
+<p align="center">
+  [ <strong>English</strong> | <a href="README-zh.md">简体中文</a> ]
+</p>
 
 `promptc-go` is a go implementation of `promptc`. It uses
 `promptc` specification to generate prompts.
