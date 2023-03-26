@@ -11,12 +11,15 @@ func TestBlockParser(t *testing.T) {
 This is a block of {Text}, Ha
 pp Day {x
 }
-MM {{}} {{{x}}}
+MM {{}} {{{x}}} {%
+	if (x > 0) { return "no" }
+	return "yes"
+%}
 `
 	block := Block{
 		text: text,
 	}
-	parsed := block.Parse()
+	parsed := block.Lexer()
 	printBlock(parsed)
 }
 
@@ -37,16 +40,20 @@ func printBlock(b *ParsedBlock) {
 func backToText(tokens []BlockToken) string {
 	sb := strings.Builder{}
 	for _, t := range tokens {
-		if t.Kind != BlockTokenKindVar {
+		switch t.Kind {
+		case BlockTokenKindLiter:
 			replaced := strings.ReplaceAll(t.Text, "{", "{{")
 			replaced = strings.ReplaceAll(replaced, "}", "}}")
 			sb.WriteString(replaced)
-			continue
+		case BlockTokenKindScript:
+			sb.WriteString("{%")
+			sb.WriteString(t.Text)
+			sb.WriteString("%}")
+		case BlockTokenKindVar:
+			sb.WriteString("{")
+			sb.WriteString(t.Text)
+			sb.WriteString("}")
 		}
-
-		sb.WriteString("{")
-		sb.WriteString(t.Text)
-		sb.WriteString("}")
 	}
 	return sb.String()
 }
