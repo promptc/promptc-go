@@ -5,14 +5,14 @@ import (
 )
 
 type Block struct {
-	text string
+	Text string
 }
 
 // Text := Alphabets | {{ | }}
 // Var := {Text}
 
 func (b *Block) Parse() *ParsedBlock {
-	rs := []rune(b.text)
+	rs := []rune(b.Text)
 	var varList []string
 	var tokens []BlockToken
 	isOpen := false
@@ -105,9 +105,9 @@ func (b *Block) Parse() *ParsedBlock {
 		tokens = append(tokens, BlockToken{sb.String(), kind})
 	}
 	return &ParsedBlock{
-		text:    b.text,
-		varList: varList,
-		tokens:  tokens,
+		Text:    b.Text,
+		VarList: varList,
+		Tokens:  tokens,
 	}
 }
 

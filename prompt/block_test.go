@@ -20,7 +20,7 @@ MM {{}} {{{x}}} {%
 {{ x}}}}
 `
 	block := Block{
-		text: text,
+		Text: text,
 	}
 	parsed := block.Parse()
 	printBlock(parsed)
@@ -33,11 +33,11 @@ func printTokens(tokens []BlockToken) {
 }
 
 func printBlock(b *ParsedBlock) {
-	fmt.Printf("TEXT : %#v\n", b.text)
-	fmt.Printf("VAR  : %#v\n", b.varList)
+	fmt.Printf("TEXT : %#v\n", b.Text)
+	fmt.Printf("VAR  : %#v\n", b.VarList)
 	fmt.Printf("TOKEN:\n")
-	printTokens(b.tokens)
-	fmt.Printf("BACK : %#v\n", backToText(b.tokens))
+	printTokens(b.Tokens)
+	fmt.Printf("BACK : %#v\n", backToText(b.Tokens))
 }
 
 func backToText(tokens []BlockToken) string {

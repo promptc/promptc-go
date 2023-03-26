@@ -6,9 +6,9 @@ import (
 )
 
 type ParsedBlock struct {
-	text    string
-	varList []string
-	tokens  []BlockToken
+	Text    string
+	VarList []string
+	Tokens  []BlockToken
 }
 
 func (p *ParsedBlock) Compile(varMap map[string]string) string {
@@ -20,7 +20,19 @@ func (p *ParsedBlock) Compile(varMap map[string]string) string {
 			panic(err)
 		}
 	}
-	for _, token := range p.tokens {
+	//_ = vm.Set("setGlobalVar", func(call otto.FunctionCall) otto.Value {
+	//	varName, _ := call.Argument(0).ToString()
+	//	varValue, _ := call.Argument(1).ToString()
+	//	if varName == "" {
+	//		failed, _ := vm.ToValue(false)
+	//		return failed
+	//	}
+	//	varMap[varName] = varValue
+	//	ok, _ := vm.ToValue(true)
+	//	return ok
+	//})
+
+	for _, token := range p.Tokens {
 		switch token.Kind {
 		case BlockTokenKindLiter:
 			sb.WriteString(token.Text)

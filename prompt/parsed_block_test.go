@@ -20,7 +20,7 @@ Prompt Compiled: {%
 		"x": "KevinZonda",
 	}
 	b := &Block{
-		text: text,
+		Text: text,
 	}
 	parsed := b.Parse()
 	rst := parsed.Compile(varMap)
@@ -47,7 +47,7 @@ Prompt Compiled: {%E
 		"x": "KevinZonda",
 	}
 	b := &Block{
-		text: text,
+		Text: text,
 	}
 	parsed := b.Parse()
 	rst := parsed.Compile(varMap)
