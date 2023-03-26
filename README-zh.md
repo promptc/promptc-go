@@ -127,11 +127,11 @@ This is reserved ''' {%Q%}
 
 #### Prompt 中的 JavaScript
 
-> **贴士**  
+> **Note**  
 > 在 prompt 中使用 JavaScript 是一个实验性功能。  
 > `promptc-go` 使用 [otto](https://github.com/robertkrimen/otto) 作为其 JavaScript 运行时
 
-> **警告**  
+> **Warning**  
 > 在 prompt 中使用 JavaScript 可能会使 prompt 变得脆弱并导致潜在的安全问题。  
 > `promptc-go` **不会**对此负责。
 
