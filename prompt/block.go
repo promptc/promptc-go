@@ -70,6 +70,9 @@ func (b *Block) Parse() *ParsedBlock {
 				if kind == BlockTokenKindScript {
 					name = strings.Trim(name, "%")
 					name = strings.TrimSpace(name)
+					if name == "Q" {
+						kind = BlockTokenKindReservedQuota
+					}
 				} else {
 					varList = append(varList, name)
 				}
@@ -101,10 +104,21 @@ func (b *Block) Parse() *ParsedBlock {
 	}
 	if sb.Len() > 0 {
 		kind := BlockTokenKindLiter
+		name := sb.String()
+		sb.Reset()
 		if isOpen {
 			kind = BlockTokenKindVar
+			name = strings.TrimSpace(name)
+			if isScriptOpen {
+				name = strings.Trim(name, "%")
+				name = strings.TrimSpace(name)
+				kind = BlockTokenKindScript
+				if name == "Q" {
+					kind = BlockTokenKindReservedQuota
+				}
+			}
 		}
-		tokens = append(tokens, BlockToken{sb.String(), kind})
+		tokens = append(tokens, BlockToken{name, kind})
 	}
 	return &ParsedBlock{
 		Text:    b.Text,

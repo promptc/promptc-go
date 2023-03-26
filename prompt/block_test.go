@@ -52,6 +52,8 @@ func backToText(tokens []BlockToken) string {
 			sb.WriteString("{%")
 			sb.WriteString(t.Text)
 			sb.WriteString("%}")
+		case BlockTokenKindReservedQuota:
+			sb.WriteString("{%Q%}")
 		case BlockTokenKindVar:
 			sb.WriteString("{")
 			sb.WriteString(t.Text)

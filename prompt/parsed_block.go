@@ -38,6 +38,8 @@ func (p *ParsedBlock) Compile(varMap map[string]string) string {
 			sb.WriteString(token.Text)
 		case BlockTokenKindVar:
 			sb.WriteString(varMap[token.Text])
+		case BlockTokenKindReservedQuota:
+			sb.WriteString("'''")
 		case BlockTokenKindScript:
 			script := token.Text
 			easyMod := false

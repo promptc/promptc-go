@@ -51,6 +51,13 @@ func analyse(p *prompt.ParsedBlock) {
 		Bold:       true,
 		//Underline:  true,
 	}
+	reserveF := console.PrintConfig{
+		Foreground: console.Gray,
+		Background: console.None,
+		Bold:       true,
+		//Underline:  true,
+	}
+
 	for _, t := range p.Tokens {
 		switch t.Kind {
 		case prompt.BlockTokenKindLiter:
@@ -61,6 +68,9 @@ func analyse(p *prompt.ParsedBlock) {
 			varF.Write("{" + t.Text + "}")
 		case prompt.BlockTokenKindScript:
 			scriptF.Write("{%%\n" + t.Text + "\n%%}")
+		case prompt.BlockTokenKindReservedQuota:
+			reserveF.Write("'''")
 		}
 	}
+	fmt.Println()
 }
