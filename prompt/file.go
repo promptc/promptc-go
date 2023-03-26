@@ -13,16 +13,20 @@ type Conf struct {
 }
 
 type File struct {
-	Conf       *Conf                          `json:"conf"`
-	Prompts    []string                       `json:"prompts"`
-	Vars       map[string]string              `json:"vars"`
-	ParsedVars map[string]interfaces.Variable `json:"-"`
+	Conf         *Conf                          `json:"conf"`
+	Prompts      []string                       `json:"prompts"`
+	Vars         map[string]string              `json:"vars"`
+	ParsedVars   map[string]interfaces.Variable `json:"-"`
+	ParsedPrompt []*ParsedBlock                 `json:"-"`
 }
 
 var reserved = []string{"conf", "prompts", "vars"}
 
 func ParseFile(content string) *File {
-	file := &File{}
+	file := &File{
+		ParsedVars: make(map[string]interfaces.Variable),
+		Vars:       make(map[string]string),
+	}
 	fileM := make(map[string]any)
 	err := hjson.Unmarshal([]byte(content), file)
 	if err != nil {
@@ -42,12 +46,24 @@ func ParseFile(content string) *File {
 		}
 		file.Vars[k] = result
 	}
+
 	for k, v := range file.Vars {
 		parsed := variable.ParseKeyValue(k, v)
 		if parsed == nil {
 			fmt.Println("Failed to parse variable", k, v)
 		}
 		file.ParsedVars[k] = parsed
+	}
+
+	for _, p := range file.Prompts {
+		block := &Block{
+			Text: p,
+		}
+		parsed := block.Parse()
+		if parsed == nil {
+			fmt.Println("Failed to parse prompt", p)
+		}
+		file.ParsedPrompt = append(file.ParsedPrompt, parsed)
 	}
 	return file
 }

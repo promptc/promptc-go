@@ -25,11 +25,24 @@ func AnalyseHandler(args []string) {
 		panic(err)
 	}
 
-	block := &prompt.Block{
-		Text: string(promptBs),
+	file := prompt.ParseFile(string(promptBs))
+	analyseFile(file)
+}
+
+func analyseFile(f *prompt.File) {
+	if f == nil {
+		shared.ErrorF("File is nil")
+		return
 	}
-	parsed := block.Parse()
-	analyse(parsed)
+	shared.InfoF("Vars in File: ")
+	for i, v := range f.ParsedVars {
+		fmt.Printf("%s: %#v\n%#v\n", i, v, v.Constraint())
+	}
+	shared.InfoF("Blocks in File: ")
+	for i, b := range f.ParsedPrompt {
+		shared.HighlightF("Block %d", i)
+		analyse(b)
+	}
 }
 
 func analyse(p *prompt.ParsedBlock) {

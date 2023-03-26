@@ -50,6 +50,14 @@ func (i *FloatType) SetConstraint(c interfaces.Constraint) {
 	i.constraint = c
 }
 
+func (i *FloatType) String() string {
+	v := fmt.Sprintf("%s : %s\n", i.name, i.Type())
+	if i.constraint != nil {
+		v += fmt.Sprintf("%#v\n", i.constraint)
+	}
+	return v
+}
+
 var _ interfaces.Variable = &FloatType{}
 
 func NewFloat(name string) *FloatType {

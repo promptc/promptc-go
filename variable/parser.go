@@ -1,6 +1,7 @@
 package variable
 
 import (
+	"fmt"
 	"github.com/hjson/hjson-go/v4"
 	"github.com/promptc/promptc-go/variable/interfaces"
 	"github.com/promptc/promptc-go/variable/types"
@@ -60,7 +61,8 @@ func consFactory(varType string, con string) interfaces.Constraint {
 	default:
 		return nil
 	}
-	if err := hjson.Unmarshal([]byte(con), &consA); err != nil {
+	if err := hjson.Unmarshal([]byte(con), consA); err != nil {
+		fmt.Println("Failed to parse constraint", con)
 		panic(err)
 	}
 	return consA
