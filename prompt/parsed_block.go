@@ -27,7 +27,16 @@ func (p *ParsedBlock) Compile(varMap map[string]string) string {
 		case BlockTokenKindVar:
 			sb.WriteString(varMap[token.Text])
 		case BlockTokenKindScript:
-			result, err := vm.Run(token.Text)
+			script := token.Text
+			easyMod := false
+			if strings.HasPrefix(script, "E") {
+				script = script[1:]
+				easyMod = true
+			}
+			if easyMod {
+				script = "result = (function(){\n" + script + "\n})()"
+			}
+			result, err := vm.Run(script)
 			if err != nil {
 				panic(err)
 			}

@@ -46,9 +46,9 @@ Current `promptc-go` supports `string`, `int`, `float` types.
 ```py
 xx{x} {{x}} {%
     if (x > 12) {
-        return "good";
+        result = "good";
     } else {
-        return "bad";
+        result = "bad";
     }
 %}
 ```
@@ -56,3 +56,63 @@ xx{x} {{x}} {%
 Anything in `{}` will be variable, e.g. `{x}` in previous example  
 Anything in `{%%}` will be js scripts  
 If you want to show `{` or `}`, use `{{` or `}}` instead
+
+#### JavaScript
+
+Promptc supports js scripts in `{%%}`. And it contains 2 modes:
+- Standard
+- Easy
+
+In standard mode, after run the js script, the promptc will get the result from `result` variable.
+    
+```py
+You Entered: {x}
+Prompt Compiled: {%
+	if (x == "1") {
+		result = "Hello"
+	} else {
+		result = "Word!";
+	}
+%}
+```
+
+If entered x = 1, the result will be:
+
+```
+You Entered: 1
+Prompt Compiled: Hello
+```
+
+In easy mode, the promptc will get the result from return value of js script. And it will
+add an `E` at the beginning of the prompt.
+
+```py
+You Entered: {x}
+Prompt Compiled: {%E
+	if (x == "1") {
+		return "Hello"
+	} else {
+		return "Word!";
+	}
+%}
+```
+
+If entered x = 1, the result will be:
+
+```
+You Entered: 1
+Prompt Compiled: Hello
+```
+
+In easy mode, the script will be wrapped in a function in order to enable `return` statement.  
+i.e. this is the actual script that will be run:
+
+```js
+result = (function(){
+  if (x == "1") {
+    return "Hello"
+  } else {
+    return "Word!";
+  }  
+}()
+```
