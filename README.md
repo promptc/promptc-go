@@ -57,47 +57,60 @@ Anything in `{}` will be variable, e.g. `{x}` in previous example
 Anything in `{%%}` will be js scripts  
 If you want to show `{` or `}`, use `{{` or `}}` instead
 
-#### JavaScript
+#### JavaScript in Prompt
 
-Promptc supports js scripts in `{%%}`. And it contains 2 modes:
+> **Note**  
+> Use JavaScript in prompt is an experimental feature.  
+> `promptc-go` uses [otto](https://github.com/robertkrimen/otto) as its JavaScript runtime
+
+> **Warning**  
+> Use JavaScript in prompt could make prompt vulnerable and cause potential security breach.  
+> `promptc-go` will **NOT** take any responsibility about it.
+
+`promptc` supports embedding JavaScript scripts in prompt with `{%%}` syntax. And it supports 2 modes:
+
 - Standard
 - Easy
 
-In standard mode, after run the js script, the promptc will get the result from `result` variable.
+##### Standard Mode
+
+In standard mode, after running the js script, the promptc will get the result from `result` variable.
     
 ```py
 You Entered: {x}
 Prompt Compiled: {%
-	if (x == "1") {
-		result = "Hello"
-	} else {
-		result = "Word!";
-	}
+    if (x == "1") {
+        result = "Hello";
+    } else {
+        result = "Word!";
+    }
 %}
 ```
 
-If entered x = 1, the result will be:
+If enter`x = 1`, the result will be:
 
 ```
 You Entered: 1
 Prompt Compiled: Hello
 ```
 
-In easy mode, the promptc will get the result from return value of js script. And it will
-add an `E` at the beginning of the prompt.
+##### Easy Mode
+
+In easy mode, the promptc will get the result from returned value of js script. And it will
+add an `E` at the beginning of the prompt. (`{%E /*script here*/ %}`)
 
 ```py
 You Entered: {x}
 Prompt Compiled: {%E
-	if (x == "1") {
-		return "Hello"
-	} else {
-		return "Word!";
-	}
+    if (x == "1") {
+        return "Hello";
+    } else {
+        return "Word!";
+    }
 %}
 ```
 
-If entered x = 1, the result will be:
+If enter `x = 1, the result will be:
 
 ```
 You Entered: 1
@@ -105,7 +118,7 @@ Prompt Compiled: Hello
 ```
 
 In easy mode, the script will be wrapped in a function in order to enable `return` statement.  
-i.e. this is the actual script that will be run:
+e.g. the actual script that will be run in previous example:
 
 ```js
 result = (function(){
