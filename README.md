@@ -9,7 +9,7 @@
 
 #### Type
 
-```json lines
+```ts
 // declare a variable
 myName : string { minLen: 3, maxLen: 10, default: "John" }
 // a var named `myName` of type `string`
