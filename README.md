@@ -6,6 +6,7 @@
 ## Example Prompt File
 
 ```ts
+// define variable constraint
 vars: {
     x: int
     // var x with int type
@@ -14,6 +15,8 @@ vars: {
 }
 // wild way to  define var
 a: int {min: 0, max: 10}
+
+// define prompts
 prompts: [
     // role: 'user' is meta info for ChatGPT
     // to make it empty, use {}
@@ -44,12 +47,12 @@ myName : string { minLen: 3, maxLen: 10, default: "John" }
 // with default value "John"
 // min length 3, max length 10
 
-myAge : int { min: 18, max: 100, default: 18 }
+myAge : int { min: 18, max: 100, default: '18' }
 // a var named `myAge` of type `int`
 // with default value 18
 // min value 18, max value 100
 
-thisPrice : float { min: 0.01, default: 0.01 }
+thisPrice : float { min: 0.01, default: '0.01' }
 // a var named `thisPrice` of type `float`
 // with default value 0.01
 // min value 0.01, and unlimited max value
@@ -60,14 +63,16 @@ Current `promptc-go` supports `string`, `int`, `float` types.
 #### Constraint
 
 - `string`
-  - `minLen`
-  - `maxLen`
+  - `minLen`: int
+  - `maxLen`: int
 - `int`
-  - `min`
-  - `max`
+  - `min`: int64
+  - `max`: int64
 - `float`
-  - `min`
-  - `max`
+  - `min`: float64
+  - `max`: float64
+- Shared
+  - `default`: string
 
 ### Prompt
 
