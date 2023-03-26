@@ -6,8 +6,9 @@ import (
 )
 
 type IntConstraint struct {
-	Min int64 `json:"min"`
-	Max int64 `json:"max"`
+	Min     *int64 `json:"min,omitempty"`
+	Max     *int64 `json:"max,omitempty"`
+	Default string `json:"default"`
 }
 
 func (i *IntConstraint) CanFit(v string) bool {
@@ -15,10 +16,10 @@ func (i *IntConstraint) CanFit(v string) bool {
 	if err != nil {
 		return false
 	}
-	if i2 < i.Min {
+	if i.Min != nil && i2 < *i.Min {
 		return false
 	}
-	if i2 > i.Max {
+	if i.Max != nil && i2 > *i.Max {
 		return false
 	}
 	return true

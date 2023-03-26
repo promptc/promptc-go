@@ -5,16 +5,17 @@ import (
 )
 
 type StringConstraint struct {
-	MinLength int `json:"min_length"`
-	MaxLength int `json:"max_length"`
+	MinLength *int   `json:"minLen"`
+	MaxLength *int   `json:"maxLen"`
+	Default   string `json:"default"`
 }
 
 func (s *StringConstraint) CanFit(s2 string) bool {
 	r := []rune(s2)
-	if len(r) < s.MinLength {
+	if s.MinLength != nil && len(r) < *s.MinLength {
 		return false
 	}
-	if len(r) > s.MaxLength {
+	if s.MaxLength != nil && len(r) > *s.MaxLength {
 		return false
 	}
 	return true
