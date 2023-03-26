@@ -9,6 +9,7 @@ type ParsedBlock struct {
 	Text    string
 	VarList []string
 	Tokens  []BlockToken
+	Extra   map[string]any
 }
 
 func (p *ParsedBlock) Compile(varMap map[string]string) string {

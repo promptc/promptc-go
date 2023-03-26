@@ -1,6 +1,7 @@
 package prompt
 
 import (
+	"github.com/hjson/hjson-go/v4"
 	"strings"
 )
 
@@ -12,7 +13,23 @@ type Block struct {
 // Var := {Text}
 
 func (b *Block) Parse() *ParsedBlock {
-	rs := []rune(b.Text)
+	lines := strings.SplitN(b.Text, "\n", 2)
+	firstLine := ""
+	toParse := ""
+	if len(lines) == 1 {
+		toParse = b.Text
+	} else {
+		firstLine = strings.TrimSpace(lines[0])
+		toParse = lines[1]
+	}
+	extra := make(map[string]any)
+	if len(firstLine) > 0 && firstLine != "{}" {
+		err := hjson.Unmarshal([]byte(firstLine), &extra)
+		if err != nil {
+			toParse = b.Text
+		}
+	}
+	rs := []rune(toParse)
 	var varList []string
 	var tokens []BlockToken
 	isOpen := false
@@ -124,6 +141,7 @@ func (b *Block) Parse() *ParsedBlock {
 		Text:    b.Text,
 		VarList: varList,
 		Tokens:  tokens,
+		Extra:   extra,
 	}
 }
 

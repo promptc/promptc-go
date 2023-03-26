@@ -3,6 +3,34 @@
 `promptc-go` is a go implementation of `promptc`. It uses
 `promptc` specification to generate prompts.
 
+## Example Prompt File
+
+```ts
+vars: {
+    x: int
+    // var x with int type
+    y: int {min: 0, max: 10}
+    z: int {min: 0, max: 10, default: '5'}
+}
+// wild way to  define var
+a: int {min: 0, max: 10}
+prompts: [
+    // role: 'user' is meta info for ChatGPT
+    // to make it empty, use {}
+    '''role: 'user'
+    You Entered: {x}
+    Prompt Compiled: {%
+        if (x == "1") {
+            result = "Hello";
+        } else {
+            result = "Word!";
+        }
+    %}
+    {%Q%}
+    '''
+]
+```
+
 ## Syntax
 
 ### Variable
@@ -56,6 +84,18 @@ xx{x} {{x}} {%
 Anything in `{}` will be variable, e.g. `{x}` in previous example  
 Anything in `{%%}` will be js scripts  
 If you want to show `{` or `}`, use `{{` or `}}` instead
+
+The first line of prompt is special, it provides some extra info for this prompt.  
+i.e. role info for ChatGPT. e.g.
+
+```
+role: 'user'
+Show me more about {x}
+```
+
+If you want to provide empty extra info, use `{}` as your first line is extremely recommended.
+Although it's not required, because once hjson parse failed, the `promptc` will prepend first
+line to your prompt, but it might cause plenty of undefined behaviour.
 
 #### JavaScript in Prompt
 

@@ -50,7 +50,6 @@ func analyse(p *prompt.ParsedBlock) {
 	for i, v := range p.VarList {
 		fmt.Println(i, v)
 	}
-	shared.InfoF("Prompt: ")
 
 	varF := console.PrintConfig{
 		Foreground: console.Cyan,
@@ -70,7 +69,12 @@ func analyse(p *prompt.ParsedBlock) {
 		Bold:       true,
 		//Underline:  true,
 	}
+	shared.InfoF("Extra: ")
+	for k, v := range p.Extra {
+		fmt.Printf("%s: %#v\n", k, v)
+	}
 
+	shared.InfoF("Tokens: ")
 	for _, t := range p.Tokens {
 		switch t.Kind {
 		case prompt.BlockTokenKindLiter:
