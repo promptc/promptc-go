@@ -87,7 +87,7 @@ Prompt Compiled: {%
 %}
 ```
 
-If enter`x = 1`, the result will be:
+If enter `x = 1`, the result will be:
 
 ```
 You Entered: 1
@@ -110,7 +110,7 @@ Prompt Compiled: {%E
 %}
 ```
 
-If enter `x = 1, the result will be:
+If enter `x = 1`, the result will be:
 
 ```
 You Entered: 1
