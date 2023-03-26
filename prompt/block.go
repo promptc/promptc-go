@@ -11,7 +11,7 @@ type Block struct {
 // Text := Alphabets | {{ | }}
 // Var := {Text}
 
-func (b *Block) Lexer() *ParsedBlock {
+func (b *Block) Parse() *ParsedBlock {
 	rs := []rune(b.text)
 	var varList []string
 	var tokens []BlockToken
@@ -119,10 +119,4 @@ func sr(r rune) string {
 		return "\\n"
 	}
 	return string(r)
-}
-
-type ParsedBlock struct {
-	text    string
-	varList []string
-	tokens  []BlockToken
 }

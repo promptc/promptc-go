@@ -22,7 +22,7 @@ MM {{}} {{{x}}} {%
 	block := Block{
 		text: text,
 	}
-	parsed := block.Lexer()
+	parsed := block.Parse()
 	printBlock(parsed)
 }
 
