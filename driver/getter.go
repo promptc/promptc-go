@@ -1,10 +1,13 @@
 package driver
 
 import (
+	"errors"
 	"github.com/promptc/promptc-go/driver/chatgpt-driver"
 	"github.com/promptc/promptc-go/driver/gpt3-driver"
 	"github.com/promptc/promptc-go/driver/interfaces"
 )
+
+var ErrProviderNotFound = errors.New("provider not found")
 
 func GetDriver(provider, model, token string) (interfaces.ProviderDriver, error) {
 	// see https://platform.openai.com/docs/models/model-endpoint-compatibility
@@ -15,7 +18,6 @@ func GetDriver(provider, model, token string) (interfaces.ProviderDriver, error)
 		case "text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001", "davinci", "curie", "babbage", "ada":
 			return gpt3_driver.New(token), nil
 		}
-		return nil, nil
 	}
-	return nil, nil
+	return nil, ErrProviderNotFound
 }

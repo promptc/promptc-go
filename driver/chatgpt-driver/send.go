@@ -17,8 +17,21 @@ func (c *ChatGPTDriver) SendRequest(p models.PromptToSend) (*openai.ChatCompleti
 			continue
 		}
 
+		role := "user"
+		if len(_p.Extra) > 0 {
+			ok := false
+			var a any
+			a, ok = _p.Extra["role"]
+			if ok {
+				role, ok = a.(string)
+				if !ok {
+					role = "user"
+				}
+			}
+		}
+
 		content := openai.ChatCompletionMessage{
-			Role:    _p.Role,
+			Role:    role,
 			Content: _p.Content,
 		}
 		message = append(message, content)

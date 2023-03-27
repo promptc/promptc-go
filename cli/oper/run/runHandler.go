@@ -2,10 +2,15 @@ package run
 
 import (
 	"fmt"
+	"github.com/KevinZonda/GoX/pkg/console"
+	"github.com/promptc/promptc-go/cli/oper/cfg"
 	"github.com/promptc/promptc-go/cli/oper/shared"
+	"github.com/promptc/promptc-go/driver"
+	"github.com/promptc/promptc-go/driver/models"
 	"github.com/promptc/promptc-go/prompt"
 	"io"
 	"os"
+	"strings"
 )
 
 func RunHandler(args []string) {
@@ -35,10 +40,36 @@ func RunHandler(args []string) {
 	// fmt.Println(string(promptBs))
 
 	varMap := shared.IniToMap(string(varBs))
-	block := &prompt.Block{
-		Text: string(promptBs),
+	file := prompt.ParseFile(string(promptBs))
+	provider := strings.ToLower(strings.TrimSpace(file.Conf.Provider))
+	model := strings.ToLower(strings.TrimSpace(file.Conf.Model))
+	providerDriver, err := driver.GetDriver(provider, model, cfg.GetCfg().GetToken(provider))
+	if err != nil {
+		panic(err)
 	}
-	parsed := block.Parse()
-	finalPrompt := parsed.Compile(varMap)
-	fmt.Println(finalPrompt)
+	compiled := file.Compile(varMap)
+	var items []models.PromptItem
+	for _, c := range compiled {
+		items = append(items, convCompiledToSend(c))
+	}
+	toSend := models.PromptToSend{
+		Items: items,
+		Model: model,
+		Extra: nil,
+	}
+	resp, err := providerDriver.GetResponse(toSend)
+	if err != nil {
+		panic(err)
+	}
+	for i, r := range resp {
+		console.Blue.AsForeground().WriteLine("Prompt #%d:", i)
+		fmt.Println(r)
+	}
+}
+
+func convCompiledToSend(c prompt.CompiledPrompt) models.PromptItem {
+	return models.PromptItem{
+		Content: c.Prompt,
+		Extra:   c.Extra,
+	}
 }

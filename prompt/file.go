@@ -67,3 +67,29 @@ func ParseFile(content string) *File {
 	}
 	return file
 }
+
+type CompiledPrompt struct {
+	Prompt string
+	Extra  map[string]any
+}
+
+func (f *File) Compile(vars map[string]string) []CompiledPrompt {
+	for k, v := range f.ParsedVars {
+		if val, ok := vars[k]; ok {
+			if setted := v.SetValue(val); !setted {
+				fmt.Println("Failed to set value", k, val)
+				continue
+			}
+			vars[k] = v.Value()
+		}
+	}
+	var result []CompiledPrompt
+	for _, p := range f.ParsedPrompt {
+		compiled := p.Compile(vars)
+		result = append(result, CompiledPrompt{
+			Prompt: compiled,
+			Extra:  p.Extra,
+		})
+	}
+	return result
+}

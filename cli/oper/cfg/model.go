@@ -24,6 +24,14 @@ func Save() {
 	}
 }
 
+func (m *Model) GetToken(name string) string {
+	switch name {
+	case "openai":
+		return m.OpenAIToken
+	}
+	return ""
+}
+
 func GetCfg() *Model {
 	path := shared.GetPath("config.json")
 	if model == nil {

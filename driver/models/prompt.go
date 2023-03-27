@@ -3,11 +3,10 @@ package models
 type PromptToSend struct {
 	Model string
 	Items []PromptItem
-	Extra any
+	Extra map[string]any
 }
 
 type PromptItem struct {
 	Content string
-	Role    string
-	Extra   any
+	Extra   map[string]any
 }

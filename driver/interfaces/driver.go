@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"github.com/promptc/promptc-go/driver/models"
 	"io"
 )
 
