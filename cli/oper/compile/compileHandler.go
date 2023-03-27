@@ -2,6 +2,7 @@ package compile
 
 import (
 	"fmt"
+	"github.com/hjson/hjson-go/v4"
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/prompt"
 	"io"
@@ -38,15 +39,31 @@ func CompileHandler(args []string) {
 	fmt.Println(string(promptBs))
 
 	varMap := shared.IniToMap(string(varBs))
-	shared.InfoF("Variables: ")
+	shared.InfoF("Entered Variables: ")
 	for k, v := range varMap {
 		fmt.Println(k, ":", v)
 	}
-	block := &prompt.Block{
-		Text: string(promptBs),
+
+	file := prompt.ParseFile(string(promptBs))
+	shared.InfoF("Prompt Conf: ")
+	{
+		bs, _ := hjson.Marshal(file.Conf)
+		fmt.Println(string(bs))
 	}
-	parsed := block.Parse()
-	finalPrompt := parsed.Compile(varMap)
-	shared.SuccessF("Compiled Prompt: ")
-	fmt.Println(finalPrompt)
+
+	shared.InfoF("Compiling...")
+	compiled := file.Compile(varMap)
+	shared.InfoF("Compiled Vars: ")
+	for k, v := range compiled.CompiledVars {
+		fmt.Println(k, ":", v)
+	}
+	shared.InfoF("Compiled Prompt: ")
+	for _, c := range compiled.Prompts {
+		shared.InfoF("Extra:")
+		for k, v := range c.Extra {
+			fmt.Println(k, ":", v)
+		}
+		shared.InfoF("Prompt:")
+		fmt.Println(c.Prompt)
+	}
 }

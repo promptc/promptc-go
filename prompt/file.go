@@ -73,23 +73,35 @@ type CompiledPrompt struct {
 	Extra  map[string]any
 }
 
-func (f *File) Compile(vars map[string]string) []CompiledPrompt {
+type CompiledFile struct {
+	Conf         *Conf
+	Prompts      []CompiledPrompt
+	CompiledVars map[string]string
+}
+
+func (f *File) Compile(vars map[string]string) *CompiledFile {
+	//varMap := make(map[string]string)
+	compiledVars := make(map[string]string)
 	for k, v := range f.ParsedVars {
 		if val, ok := vars[k]; ok {
 			if setted := v.SetValue(val); !setted {
 				fmt.Println("Failed to set value", k, val)
 				continue
 			}
-			vars[k] = v.Value()
+			compiledVars[k] = v.Value()
 		}
 	}
 	var result []CompiledPrompt
 	for _, p := range f.ParsedPrompt {
-		compiled := p.Compile(vars)
+		compiled := p.Compile(compiledVars)
 		result = append(result, CompiledPrompt{
 			Prompt: compiled,
 			Extra:  p.Extra,
 		})
 	}
-	return result
+	return &CompiledFile{
+		Conf:         f.Conf,
+		Prompts:      result,
+		CompiledVars: compiledVars,
+	}
 }

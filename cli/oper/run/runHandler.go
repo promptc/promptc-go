@@ -49,7 +49,7 @@ func RunHandler(args []string) {
 	}
 	compiled := file.Compile(varMap)
 	var items []models.PromptItem
-	for _, c := range compiled {
+	for _, c := range compiled.Prompts {
 		items = append(items, convCompiledToSend(c))
 	}
 	toSend := models.PromptToSend{
