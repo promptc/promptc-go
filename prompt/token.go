@@ -1,8 +1,8 @@
 package prompt
 
 type BlockToken struct {
-	Text string
-	Kind BlockTokenKind
+	Text string         `json:"text"`
+	Kind BlockTokenKind `json:"kind"`
 }
 
 type BlockTokenKind string

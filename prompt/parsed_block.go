@@ -1,15 +1,27 @@
 package prompt
 
 import (
+	"encoding/json"
 	"github.com/robertkrimen/otto"
 	"strings"
 )
 
 type ParsedBlock struct {
-	Text    string
-	VarList []string
-	Tokens  []BlockToken
-	Extra   map[string]any
+	Text    string         `json:"-"`
+	VarList []string       `json:"-"`
+	Tokens  []BlockToken   `json:"tokens"`
+	Extra   map[string]any `json:"extra"`
+}
+
+func (p *ParsedBlock) ToJson() ([]byte, error) {
+	return json.Marshal(p)
+}
+
+func (p *ParsedBlock) ToMap() map[string]any {
+	m := make(map[string]any)
+	m["tokens"] = p.Tokens
+	m["extra"] = p.Extra
+	return m
 }
 
 func (p *ParsedBlock) Compile(varMap map[string]string) string {

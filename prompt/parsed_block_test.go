@@ -1,6 +1,7 @@
 package prompt
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 )
@@ -50,6 +51,18 @@ Prompt Compiled: {%E
 		Text: text,
 	}
 	parsed := b.Parse()
+	jsoned, err := parsed.ToJson()
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Println(string(jsoned))
+	maped := parsed.ToMap()
+	Njson, err := json.Marshal(maped)
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Println(string(Njson))
+
 	rst := parsed.Compile(varMap)
 	fmt.Println(rst)
 
