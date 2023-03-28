@@ -2,7 +2,6 @@ package interfaces
 
 import (
 	"github.com/promptc/promptc-go/driver/models"
-	"io"
 )
 
 type ProviderDriver interface {
@@ -10,5 +9,10 @@ type ProviderDriver interface {
 }
 
 type ProviderStreamDriver interface {
-	GetStreamResponse(prompt models.PromptToSend) (io.ReadCloser, error)
+	GetStreamResponse(prompt models.PromptToSend) (StreamReceiver, error)
+}
+
+type StreamReceiver interface {
+	Receive() (choices []string, err error, eof bool)
+	Close()
 }

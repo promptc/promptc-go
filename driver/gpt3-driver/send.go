@@ -2,23 +2,15 @@ package gpt3_driver
 
 import (
 	"context"
-	"errors"
+	"github.com/promptc/promptc-go/driver/interfaces"
 	"github.com/promptc/promptc-go/driver/models"
 	"github.com/sashabaranov/go-openai"
 )
 
-var EmptyPrompt = errors.New("empty prompt")
-
 func (c *GPT3Driver) SendRequest(p models.PromptToSend) (*openai.CompletionResponse, error) {
-	req := factoryRequest(p.Model)
-	for _, _p := range p.Items {
-		if _p.Content == "" {
-			continue
-		}
-		req.Prompt = _p.Content
-	}
+	req := factoryRequest(p)
 	if req.Prompt == "" {
-		return nil, EmptyPrompt
+		return nil, interfaces.ErrEmptyPrompt
 	}
 	ctx := context.Background()
 	resp, err := c.Client.CreateCompletion(ctx, req)
@@ -26,4 +18,13 @@ func (c *GPT3Driver) SendRequest(p models.PromptToSend) (*openai.CompletionRespo
 		return nil, err
 	}
 	return &resp, nil
+}
+
+func (c *GPT3Driver) SendStreamRequest(p models.PromptToSend) (*openai.CompletionStream, error) {
+	req := factoryRequest(p)
+	if req.Prompt == "" {
+		return nil, interfaces.ErrEmptyPrompt
+	}
+	ctx := context.Background()
+	return c.Client.CreateCompletionStream(ctx, req)
 }
