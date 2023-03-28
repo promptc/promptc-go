@@ -27,6 +27,11 @@ type File struct {
 	ParsedPrompt []*ParsedBlock                 `json:"-"`
 }
 
+func isReservedKey(key string) bool {
+	return key == "conf" || key == "prompts" || key == "vars" ||
+		key == "author" || key == "license" || key == "name"
+}
+
 var reserved = []string{"conf", "prompts", "vars"}
 
 func ParseFile(content string) *File {
@@ -46,20 +51,17 @@ func ParseFile(content string) *File {
 	for _, r := range reserved {
 		delete(fileM, r)
 	}
+
+	// parse wild defined vars
 	for k, v := range fileM {
+		if isReservedKey(k) {
+			continue
+		}
 		result, ok := v.(string)
 		if !ok {
 			continue
 		}
 		file.Vars[k] = result
-	}
-
-	for k, v := range file.Vars {
-		parsed := variable.ParseKeyValue(k, v)
-		if parsed == nil {
-			fmt.Println("Failed to parse variable", k, v)
-		}
-		file.ParsedVars[k] = parsed
 	}
 
 	for _, p := range file.Prompts {
@@ -70,7 +72,20 @@ func ParseFile(content string) *File {
 		if parsed == nil {
 			fmt.Println("Failed to parse prompt", p)
 		}
+		for _, v := range parsed.VarList {
+			if _, ok := file.Vars[v]; !ok {
+				file.Vars[v] = ""
+			}
+		}
 		file.ParsedPrompt = append(file.ParsedPrompt, parsed)
+	}
+
+	for k, v := range file.Vars {
+		parsed := variable.ParseKeyValue(k, v)
+		if parsed == nil {
+			fmt.Println("Failed to parse variable", k, v)
+		}
+		file.ParsedVars[k] = parsed
 	}
 	return file
 }

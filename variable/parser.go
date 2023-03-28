@@ -18,6 +18,12 @@ func Parse(singleLine string) interfaces.Variable {
 }
 
 func ParseKeyValue(name, tail string) interfaces.Variable {
+	tail = strings.TrimSpace(tail)
+	if tail == "" {
+		v := types.NewString(name)
+		v.SetConstraint(&types.NilConstraint{})
+		return v
+	}
 	typeAndTail := strings.SplitN(tail, "{", 2)
 	vType := strings.TrimSpace(typeAndTail[0])
 	cons := ""
