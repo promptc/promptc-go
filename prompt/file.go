@@ -28,36 +28,37 @@ type File struct {
 	ParsedPrompt []*ParsedBlock                 `json:"-"`
 }
 
-func isReservedKey(key string) bool {
-	return key == "conf" || key == "prompts" || key == "vars" ||
-		key == "author" || key == "license" || key == "project" || key == "version"
-}
-
-var reserved = []string{"conf", "prompts", "vars"}
+var reserved = []string{"conf", "prompts", "vars", "author", "license", "project", "version"}
 
 func ParseFile(content string) *File {
 	file := &File{
 		ParsedVars: make(map[string]interfaces.Variable),
 		Vars:       make(map[string]string),
 	}
-	fileM := make(map[string]any)
-	err := hjson.Unmarshal([]byte(content), file)
+	var fileM map[string]any
+	var hjsonResult any
+	err := hjson.Unmarshal([]byte(content), &hjsonResult)
 	if err != nil {
 		panic(err)
 	}
-	err = hjson.Unmarshal([]byte(content), &fileM)
-	if err != nil {
-		panic(err)
+	fileM, ok := hjsonResult.(map[string]any)
+	if !ok {
+		fileM = make(map[string]any)
+		file.Prompts = append(file.Prompts, content)
+	} else {
+		err = hjson.Unmarshal([]byte(content), file)
+		if err != nil {
+			panic(err)
+		}
 	}
+
+	// remove reserved keys
 	for _, r := range reserved {
 		delete(fileM, r)
 	}
 
 	// parse wild defined vars
 	for k, v := range fileM {
-		if isReservedKey(k) {
-			continue
-		}
 		result, ok := v.(string)
 		if !ok {
 			continue
