@@ -4,7 +4,8 @@
 </p>
 
 `promptc-go` is a go implementation of `promptc`. It uses
-`promptc` specification to generate prompts.
+`promptc` specification to generate, analyse, build, compile & run
+`promptc` files.
 
 ## promptc-cli
 
