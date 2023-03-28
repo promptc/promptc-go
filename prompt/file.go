@@ -15,7 +15,8 @@ type Conf struct {
 type FileInfo struct {
 	Author  string `json:"author,omitempty"`
 	License string `json:"license,omitempty"`
-	Name    string `json:"name,omitempty"`
+	Project string `json:"project,omitempty"`
+	Version string `json:"version,omitempty"`
 }
 
 type File struct {
@@ -29,7 +30,7 @@ type File struct {
 
 func isReservedKey(key string) bool {
 	return key == "conf" || key == "prompts" || key == "vars" ||
-		key == "author" || key == "license" || key == "name"
+		key == "author" || key == "license" || key == "project" || key == "version"
 }
 
 var reserved = []string{"conf", "prompts", "vars"}

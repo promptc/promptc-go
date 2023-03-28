@@ -9,6 +9,12 @@
 ## Example Prompt File
 
 ```ts
+// meta info
+project: test
+author: KevinZonda
+license: MIT
+version: 0.0.1
+
 // define variable constraint
 vars: {
     x: int

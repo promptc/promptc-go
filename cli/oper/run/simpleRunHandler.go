@@ -7,11 +7,14 @@ import (
 )
 
 func SimpleRunHandler(args []string) {
-	if len(args) != 2 {
-		panic("Usage: promptc-cli [prompt-file] [input]")
+	if len(args) < 1 {
+		panic("Usage: promptc-cli [prompt-file] [input?]")
 	}
 	path := args[0]
-	input := args[1]
+	input := ""
+	if len(args) == 2 {
+		input = args[1]
+	}
 	txt, err := fetchFile(path)
 	if err != nil {
 		panic(err)
@@ -19,8 +22,8 @@ func SimpleRunHandler(args []string) {
 	file := prompt.ParseFile(txt)
 	if len(file.Vars) > 1 {
 		fmt.Println("Required following vars:")
-		for _, v := range file.Vars {
-			fmt.Println("-", v)
+		for k, v := range file.Vars {
+			fmt.Println("-", k, "->", v)
 		}
 		panic("Too many vars")
 	}
@@ -30,13 +33,34 @@ func SimpleRunHandler(args []string) {
 			varMap[k] = input
 		}
 	}
+	printSep()
+	printInfo(file.FileInfo)
+	printSep()
 	compiled := file.Compile(varMap)
 	fmt.Println("Compiled To: ")
 	for _, c := range compiled.Prompts {
-		fmt.Println("######")
 		fmt.Println(c.Prompt)
 	}
 
+}
+
+func printSep() {
+	fmt.Println("================")
+}
+
+func printInfo(f prompt.FileInfo) {
+	if f.Project != "" {
+		fmt.Println("Project:", f.Project)
+	}
+	if f.Version != "" {
+		fmt.Println("Version:", f.Version)
+	}
+	if f.Author != "" {
+		fmt.Println("Author:", f.Author)
+	}
+	if f.License != "" {
+		fmt.Println("License:", f.License)
+	}
 }
 
 func fetchFile(file string) (txt string, err error) {
