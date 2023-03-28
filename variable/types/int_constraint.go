@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/promptc/promptc-go/utils"
 	"github.com/promptc/promptc-go/variable/interfaces"
 	"strconv"
 )
@@ -23,6 +24,10 @@ func (i *IntConstraint) CanFit(v string) bool {
 		return false
 	}
 	return true
+}
+
+func (i *IntConstraint) String() string {
+	return utils.Hjson(*i)
 }
 
 var _ interfaces.Constraint = &IntConstraint{}

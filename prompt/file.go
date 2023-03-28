@@ -12,7 +12,14 @@ type Conf struct {
 	Provider string `json:"provider,omitempty,default=OpenAI"`
 }
 
+type FileInfo struct {
+	Author  string `json:"author,omitempty"`
+	License string `json:"license,omitempty"`
+	Name    string `json:"name,omitempty"`
+}
+
 type File struct {
+	FileInfo
 	Conf         *Conf                          `json:"conf"`
 	Prompts      []string                       `json:"prompts"`
 	Vars         map[string]string              `json:"vars"`
@@ -74,6 +81,7 @@ type CompiledPrompt struct {
 }
 
 type CompiledFile struct {
+	Info         FileInfo
 	Conf         *Conf
 	Prompts      []CompiledPrompt
 	CompiledVars map[string]string
@@ -100,6 +108,7 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 		})
 	}
 	return &CompiledFile{
+		Info:         f.FileInfo,
 		Conf:         f.Conf,
 		Prompts:      result,
 		CompiledVars: compiledVars,

@@ -12,4 +12,5 @@ type Variable interface {
 
 type Constraint interface {
 	CanFit(string) bool
+	String() string
 }
