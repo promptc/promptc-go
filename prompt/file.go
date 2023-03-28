@@ -9,7 +9,7 @@ import (
 
 type Conf struct {
 	Model    string `json:"model,omitempty,default=gpt-3.5-turbo"`
-	Provider string `json:"provider,omitempty,default=OpenAI"`
+	Provider string `json:"provider,omitempty,default=openai"`
 }
 
 type FileInfo struct {
@@ -45,6 +45,10 @@ func ParseFile(content string) *File {
 	if !ok {
 		fileM = make(map[string]any)
 		file.Prompts = append(file.Prompts, content)
+		file.Conf = &Conf{
+			Model:    "gpt-3.5-turbo",
+			Provider: "openai",
+		}
 	} else {
 		err = hjson.Unmarshal([]byte(content), file)
 		if err != nil {

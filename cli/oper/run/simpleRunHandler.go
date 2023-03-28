@@ -2,8 +2,13 @@ package run
 
 import (
 	"fmt"
+	"github.com/KevinZonda/GoX/pkg/console"
 	"github.com/KevinZonda/GoX/pkg/iox"
+	"github.com/promptc/promptc-go/cli/oper/cfg"
+	"github.com/promptc/promptc-go/driver"
+	"github.com/promptc/promptc-go/driver/models"
 	"github.com/promptc/promptc-go/prompt"
+	"strings"
 )
 
 func SimpleRunHandler(args []string) {
@@ -42,6 +47,29 @@ func SimpleRunHandler(args []string) {
 		fmt.Println(c.Prompt)
 	}
 
+	provider := strings.ToLower(strings.TrimSpace(file.Conf.Provider))
+	model := strings.ToLower(strings.TrimSpace(file.Conf.Model))
+	providerDriver, err := driver.GetDriver(provider, model, cfg.GetCfg().GetToken(provider))
+
+	var items []models.PromptItem
+	for _, c := range compiled.Prompts {
+		items = append(items, convCompiledToSend(c))
+	}
+	toSend := models.PromptToSend{
+		Items: items,
+		Model: model,
+		Extra: nil,
+	}
+	printSep()
+	resp, err := providerDriver.GetResponse(toSend)
+	if err != nil {
+		panic(err)
+	}
+	for i, r := range resp {
+		console.Blue.AsForeground().WriteLine("Response #%d:", i)
+		fmt.Println(r)
+	}
+
 }
 
 func printSep() {
@@ -49,17 +77,31 @@ func printSep() {
 }
 
 func printInfo(f prompt.FileInfo) {
+	sb := strings.Builder{}
 	if f.Project != "" {
-		fmt.Println("Project:", f.Project)
+		sb.WriteString("Project: ")
+		sb.WriteString(f.Project)
+		sb.WriteString("\n")
 	}
 	if f.Version != "" {
-		fmt.Println("Version:", f.Version)
+		sb.WriteString("Version: ")
+		sb.WriteString(f.Version)
+		sb.WriteString("\n")
 	}
 	if f.Author != "" {
-		fmt.Println("Author:", f.Author)
+		sb.WriteString("Author: ")
+		sb.WriteString(f.Author)
+		sb.WriteString("\n")
 	}
 	if f.License != "" {
-		fmt.Println("License:", f.License)
+		sb.WriteString("License: ")
+		sb.WriteString(f.License)
+		sb.WriteString("\n")
+	}
+	if sb.Len() > 0 {
+		fmt.Println(sb.String())
+	} else {
+		fmt.Println("No info provided by prompt file")
 	}
 }
 
