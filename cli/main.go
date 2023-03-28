@@ -19,7 +19,7 @@ func main() {
 		return
 	}
 	verb := args[0]
-	args = args[1:]
+	keepVerb := false
 	switch verb {
 	case "help":
 		handler = help.HelpHandler
@@ -33,6 +33,12 @@ func main() {
 		handler = compile.CompileHandler
 	case "analyse":
 		handler = compile.AnalyseHandler
+	default:
+		handler = run.SimpleRunHandler
+		keepVerb = true
+	}
+	if !keepVerb {
+		args = args[1:]
 	}
 	if handler == nil {
 		help.HelpHandler(args)
