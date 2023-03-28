@@ -6,7 +6,26 @@
 `promptc-go` is a go implementation of `promptc`. It uses
 `promptc` specification to generate prompts.
 
+## promptc-cli
+
+<p align="center">
+  <img src="docs/img/cli.png" />
+  <em>Above prompt file is adapted from
+  <a href="https://github.com/zinccat/zkit">zinccat/zkit</a>,
+  licensed under
+  <a href="https://github.com/zinccat/ZKit/blob/main/LICENSE">GPLv3</a></em>
+</p>
+
+```sh
+# As simple as it should be
+> promptc $prompt $input
+```
+
+More info about promptc-cli, please refer to [docs/cli.md](docs/cli.md).
+
 ## Example Prompt File
+
+Structured Prompt File:
 
 ```ts
 // meta info
@@ -22,7 +41,7 @@ vars: {
     y: int {min: 0, max: 10}
     z: int {min: 0, max: 10, default: '5'}
 }
-// wild way to  define var
+// wild way to define var
 a: int {min: 0, max: 10}
 
 // define prompts
@@ -43,7 +62,22 @@ prompts: [
 ]
 ```
 
+Single-line Prompt File<sup>Experimental</sup>:
+
+```py
+You Entered: {x}
+```
+
 ## Syntax
+
+### Single-line prompt file:
+
+> **Note**  
+> Single-line prompt file currently is an experimental feature.  
+> It's not recommended to use it in production environment.
+
+You can write the **single-line** prompt file without structured.
+
 
 ### Variable
 
@@ -199,4 +233,72 @@ result = (function(){
     return "Word!";
   }  
 }()
+```
+
+### Meta Info
+
+Meta info would be act as special **wild-way defined variables** (but it will not be treated as variable).
+
+Current supported meta info:
+
+```ts
+project: test
+author: KevinZonda
+license: MIT
+version: 0.0.1
+```
+
+You can define same name in `vars` section if you want.
+
+```ts
+// prompt1.promptc
+project: test
+author: KevinZonda
+license: MIT
+version: 0.0.1
+
+vars: {
+    x: int
+}
+
+// VarList:
+//   - x: string
+```
+
+
+```ts
+// prompt2.promptc
+project: test
+author: KevinZonda
+license: MIT
+version: 0.0.1
+
+vars: {
+    x: int
+    project: string
+    license: string {minLen: 12}
+}
+
+// VarList:
+//   - x: string
+//   - project: string
+//   - license: string
+```
+
+```ts
+// prompt3.promptc
+project: test
+author: KevinZonda
+license: MIT
+version: 0.0.1
+
+prompts: [
+  '''{}
+  {%
+    console.log(project); // will print nothing
+  %}
+  '''
+]
+// VarList:
+//   - project: string
 ```
