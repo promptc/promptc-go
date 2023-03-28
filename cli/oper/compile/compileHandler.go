@@ -2,9 +2,9 @@ package compile
 
 import (
 	"fmt"
-	"github.com/hjson/hjson-go/v4"
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/prompt"
+	"github.com/promptc/promptc-go/utils"
 	"io"
 	"os"
 )
@@ -46,10 +46,7 @@ func CompileHandler(args []string) {
 
 	file := prompt.ParseFile(string(promptBs))
 	shared.InfoF("Prompt Conf: ")
-	{
-		bs, _ := hjson.Marshal(file.Conf)
-		fmt.Println(string(bs))
-	}
+	fmt.Println(utils.Hjson(file.Conf))
 
 	shared.InfoF("Compiling...")
 	compiled := file.Compile(varMap)
