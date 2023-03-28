@@ -17,4 +17,12 @@ func (c *ChatGPTDriver) GetResponse(prompt models.PromptToSend) ([]string, error
 	return choices, nil
 }
 
+func (c *ChatGPTDriver) StreamAvailable() bool {
+	return false
+}
+
+func (c *ChatGPTDriver) ToStream() interfaces.ProviderStreamDriver {
+	return c
+}
+
 var _ interfaces.ProviderDriver = (*ChatGPTDriver)(nil)

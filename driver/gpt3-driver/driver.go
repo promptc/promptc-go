@@ -14,6 +14,14 @@ func (c *GPT3Driver) GetResponse(prompt models.PromptToSend) ([]string, error) {
 	return choicesToArr(resp.Choices), nil
 }
 
+func (c *GPT3Driver) StreamAvailable() bool {
+	return false
+}
+
+func (c *GPT3Driver) ToStream() interfaces.ProviderStreamDriver {
+	return c
+}
+
 var _ interfaces.ProviderDriver = (*GPT3Driver)(nil)
 
 func choicesToArr(choices []openai.CompletionChoice) []string {

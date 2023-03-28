@@ -6,6 +6,8 @@ import (
 
 type ProviderDriver interface {
 	GetResponse(prompt models.PromptToSend) ([]string, error)
+	StreamAvailable() bool
+	ToStream() ProviderStreamDriver
 }
 
 type ProviderStreamDriver interface {
