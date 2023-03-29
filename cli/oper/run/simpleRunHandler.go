@@ -156,6 +156,6 @@ func fetchFile(file string) (txt string, structured bool, err error) {
 		return
 	}
 	structured = false
-	txt, err = iox.ReadAllText(file + ".ptc")
+	txt, err = iox.ReadAllText(file + ".prompt")
 	return
 }
