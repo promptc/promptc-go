@@ -55,6 +55,43 @@ var1=This is a variable
 
 ## Run Promptc
 
+### Simple Run/Implicit Run
+
+```
+> promptc <prompt_file> [vars...?]
+```
+
+It will find prompt file by following sequence:
+- `<prompt_file>`
+- `<prompt_file>.promptc`
+- `<prompt_file>.ptc`
+- `<prompt_file>.prompt`
+
+Except the final `.prompt` file, all other files will be treated as promptc file. i.e. a structured promptc file.
+
+The last `<prompt_file>.prompt` will be treated as a single prompt block.
+
+If your prompt file contains no variables, the promptc will append all `vars` to the end of prompt file and run it.
+
+For example:
+
+```sh
+> cat trans-en.prompt
+I want you to act as an English translator. I will speak to you in any language and you will detect the language, translate it to English.
+> promptc trans-en "你好世界" 
+================
+No info provided by prompt file
+================
+Compiled To: 
+I want you to act as an English translator. I will speak to you in any language and you will detect the language, translate it to English.
+ 你好世界
+================
+Response #0:
+The language is Chinese and the translation in English is "Hello world".
+```
+
+### Run as Verb (Explicit Run)
+
 ```sh
 > promptc run <prompt_file> <var_file>
 ```
