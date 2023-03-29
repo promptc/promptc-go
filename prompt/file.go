@@ -54,12 +54,14 @@ func ParseFile(content string) *File {
 
 func (f *File) parseVariable() {
 	for k, v := range f.Vars {
-		parsed := variable.ParseKeyValue(k, v)
-		if parsed == nil {
-			f.Exceptions = append(f.Exceptions, fmt.Errorf("failed to parse variable %s -> %s", k, v))
-			continue
+		parsed, err := variable.ParseKeyValue(k, v)
+		if parsed != nil {
+			f.ParsedVars[k] = parsed
 		}
-		f.ParsedVars[k] = parsed
+		if err != nil {
+			f.Exceptions = append(f.Exceptions, fmt.Errorf("failed to parse variable %s -> %s", k, v))
+			f.Exceptions = append(f.Exceptions, err)
+		}
 	}
 }
 

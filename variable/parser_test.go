@@ -8,9 +8,12 @@ import (
 func TestParse(t *testing.T) {
 	v := "x : int { min: 1, max: 10 }"
 	fmt.Printf("ToDo: %#v\n", v)
-	p := Parse(v)
+	p, err := Parse(v)
 	if p == nil {
 		t.Error("Failed to parse variable")
+	}
+	if err != nil {
+		t.Error(err)
 	}
 	fmt.Printf("Type: %#v\n", p)
 	fmt.Printf("Cons: %s\n", p.Constraint().String())
