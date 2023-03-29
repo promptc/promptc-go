@@ -11,11 +11,11 @@ The promptc command-line interface (CLI) is a cross-platform toolchain for devel
 ## Config API Keys
 
 ```sh
-> promptc show
+$ promptc show
 {
   openai_token: ''
 }
-> promptc set openai_token <your_token>
+$ promptc set openai_token <your_token>
 {
   openai_token: <your_token>
 }
@@ -24,7 +24,7 @@ The promptc command-line interface (CLI) is a cross-platform toolchain for devel
 ## Analyse Promptc
 
 ```sh
-> promptc analyse <prompt_file>
+$ promptc analyse <prompt_file>
 ```
 
 ![](img/analyse.png)
@@ -40,7 +40,7 @@ The colour in Tokens sections shows parsed token type.
 ## Compile Promptc
 
 ```sh
-> promptc compile <prompt_file> <var_file>
+$ promptc compile <prompt_file> <var_file>
 ```
 
 It will show compile details and the compiled prompt.
@@ -48,7 +48,7 @@ It will show compile details and the compiled prompt.
 `var_file` is a file which contains variables for promptc. It is a key-value pair file (or ini?).
 
 ```ini
-> cat varfile
+$ cat varfile
 x=111
 var1=This is a variable
 ```
@@ -58,7 +58,7 @@ var1=This is a variable
 ### Simple Run/Implicit Run
 
 ```
-> promptc <prompt_file> [vars...?]
+$ promptc <prompt_file> [vars...?]
 ```
 
 It will find prompt file by following sequence:
@@ -76,9 +76,10 @@ If your prompt file contains no variables, the promptc will append all `vars` to
 For example:
 
 ```sh
-> cat trans-en.prompt
+$ # Following prompt file is adapted from https://github.com/zinccat/zkit, licensed under GPLv3
+$ cat trans-en.prompt
 I want you to act as an English translator. I will speak to you in any language and you will detect the language, translate it to English.
-> promptc trans-en "你好世界" 
+$ promptc trans-en "你好世界" 
 ================
 No info provided by prompt file
 ================
@@ -93,7 +94,7 @@ The language is Chinese and the translation in English is "Hello world".
 ### Run as Verb (Explicit Run)
 
 ```sh
-> promptc run <prompt_file> <var_file>
+$ promptc run <prompt_file> <var_file>
 ```
 
 Not ready
