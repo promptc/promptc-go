@@ -44,10 +44,15 @@ func SimpleRunHandler(args []string) {
 			varMap[k] = input
 		}
 	} else {
-		if len(file.Prompts) == 0 {
+		if len(file.ParsedPrompt) == 0 {
 			panic("No prompts")
 		}
-		file.Prompts[len(file.Prompts)-1] += "\n" + strings.Join(inputs, " ")
+		lastBlock := file.ParsedPrompt[len(file.ParsedPrompt)-1]
+		lastBlock.Tokens = append(lastBlock.Tokens, prompt.BlockToken{
+			Kind: prompt.BlockTokenKindLiter,
+			Text: " " + strings.Join(inputs, " "),
+		})
+		file.Prompts[len(file.Prompts)-1] += " " + strings.Join(inputs, " ")
 	}
 	printSep()
 	printInfo(file.FileInfo)
