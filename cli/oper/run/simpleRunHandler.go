@@ -20,11 +20,16 @@ func SimpleRunHandler(args []string) {
 	if len(args) == 2 {
 		input = args[1]
 	}
-	txt, err := fetchFile(path)
+	txt, structured, err := fetchFile(path)
 	if err != nil {
 		panic(err)
 	}
-	file := prompt.ParseFile(txt)
+	var file *prompt.File
+	if structured {
+		file = prompt.ParseFile(txt)
+	} else {
+		file = prompt.ParseUnstructuredFile(txt)
+	}
 	if len(file.Vars) > 1 {
 		fmt.Println("Required following vars:")
 		for k, v := range file.Vars {
@@ -130,7 +135,8 @@ func printInfo(f prompt.FileInfo) {
 	}
 }
 
-func fetchFile(file string) (txt string, err error) {
+func fetchFile(file string) (txt string, structured bool, err error) {
+	structured = true
 	txt, err = iox.ReadAllText(file)
 	if err == nil {
 		return
@@ -143,5 +149,7 @@ func fetchFile(file string) (txt string, err error) {
 	if err == nil {
 		return
 	}
-	return "", err
+	structured = false
+	txt, err = iox.ReadAllText(file + ".ptc")
+	return
 }

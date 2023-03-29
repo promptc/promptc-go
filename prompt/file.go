@@ -96,6 +96,42 @@ func ParseFile(content string) *File {
 	return file
 }
 
+func ParseUnstructuredFile(content string) *File {
+	file := &File{
+		ParsedVars: make(map[string]interfaces.Variable),
+		Vars:       make(map[string]string),
+		Prompts:    []string{content},
+		Conf: &Conf{
+			Model:    "gpt-3.5-turbo",
+			Provider: "openai",
+		},
+	}
+	for _, p := range file.Prompts {
+		block := &Block{
+			Text: p,
+		}
+		parsed := block.Parse()
+		if parsed == nil {
+			fmt.Println("Failed to parse prompt", p)
+		}
+		for _, v := range parsed.VarList {
+			if _, ok := file.Vars[v]; !ok {
+				file.Vars[v] = ""
+			}
+		}
+		file.ParsedPrompt = append(file.ParsedPrompt, parsed)
+	}
+
+	for k, v := range file.Vars {
+		parsed := variable.ParseKeyValue(k, v)
+		if parsed == nil {
+			fmt.Println("Failed to parse variable", k, v)
+		}
+		file.ParsedVars[k] = parsed
+	}
+	return file
+}
+
 type CompiledPrompt struct {
 	Prompt string
 	Extra  map[string]any
