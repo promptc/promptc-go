@@ -1,6 +1,7 @@
 package types
 
 import (
+	"errors"
 	"github.com/promptc/promptc-go/utils"
 	"github.com/promptc/promptc-go/variable/interfaces"
 	"strconv"
@@ -28,6 +29,13 @@ func (i *IntConstraint) CanFit(v string) bool {
 
 func (i *IntConstraint) String() string {
 	return utils.Hjson(*i)
+}
+
+func (i *IntConstraint) Validate() error {
+	if i.Min != nil && i.Max != nil && *i.Min > *i.Max {
+		return errors.New("min cannot be greater than max")
+	}
+	return nil
 }
 
 var _ interfaces.Constraint = &IntConstraint{}

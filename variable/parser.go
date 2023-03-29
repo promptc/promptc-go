@@ -77,5 +77,8 @@ func consFactory(varType string, con string) (interfaces.Constraint, error) {
 	if err := hjson.Unmarshal([]byte(con), consA); err != nil {
 		return nil, err
 	}
+	if err := consA.Validate(); err != nil {
+		return nil, err
+	}
 	return consA, nil
 }

@@ -10,3 +10,7 @@ func (c *NilConstraint) CanFit(value string) bool {
 func (c *NilConstraint) String() string {
 	return ""
 }
+
+func (c *NilConstraint) Validate() error {
+	return nil
+}
