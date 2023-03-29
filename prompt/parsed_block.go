@@ -2,6 +2,7 @@ package prompt
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/robertkrimen/otto"
 	"strings"
 )
@@ -24,13 +25,16 @@ func (p *ParsedBlock) ToMap() map[string]any {
 	return m
 }
 
-func (p *ParsedBlock) Compile(varMap map[string]string) string {
+func (p *ParsedBlock) Compile(varMap map[string]string) (compiled string, exceptions []error, fatal bool) {
+	fatal = false
 	sb := strings.Builder{}
 	vm := otto.New()
 	for k, v := range varMap {
 		err := vm.Set(k, v)
 		if err != nil {
-			panic(err)
+			exceptions = append(exceptions, err)
+			fatal = true
+			return
 		}
 	}
 	//_ = vm.Set("setGlobalVar", func(call otto.FunctionCall) otto.Value {
@@ -50,7 +54,12 @@ func (p *ParsedBlock) Compile(varMap map[string]string) string {
 		case BlockTokenKindLiter:
 			sb.WriteString(token.Text)
 		case BlockTokenKindVar:
-			sb.WriteString(varMap[token.Text])
+			varVal, ok := varMap[token.Text]
+			if !ok {
+				exceptions = append(exceptions, errors.New("undefined variable: "+token.Text))
+				continue
+			}
+			sb.WriteString(varVal)
 		case BlockTokenKindReservedQuota:
 			sb.WriteString("'''")
 		case BlockTokenKindScript:
@@ -65,10 +74,13 @@ func (p *ParsedBlock) Compile(varMap map[string]string) string {
 			}
 			result, err := vm.Run(script)
 			if err != nil {
-				panic(err)
+				exceptions = append(exceptions, err)
+				fatal = true
+				return
 			}
 			sb.WriteString(result.String())
 		}
 	}
-	return sb.String()
+	compiled = sb.String()
+	return
 }

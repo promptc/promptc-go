@@ -7,29 +7,6 @@ import (
 	"github.com/promptc/promptc-go/variable/interfaces"
 )
 
-type Conf struct {
-	Model    string `json:"model,omitempty,default=gpt-3.5-turbo"`
-	Provider string `json:"provider,omitempty,default=openai"`
-}
-
-type FileInfo struct {
-	Author  string `json:"author,omitempty"`
-	License string `json:"license,omitempty"`
-	Project string `json:"project,omitempty"`
-	Version string `json:"version,omitempty"`
-}
-
-type File struct {
-	FileInfo
-	Conf         *Conf                          `json:"conf"`
-	Prompts      []string                       `json:"prompts"`
-	Vars         map[string]string              `json:"vars"`
-	ParsedVars   map[string]interfaces.Variable `json:"-"`
-	ParsedPrompt []*ParsedBlock                 `json:"-"`
-}
-
-var reserved = []string{"conf", "prompts", "vars", "author", "license", "project", "version"}
-
 func ParseFile(content string) *File {
 	file := &File{
 		ParsedVars: make(map[string]interfaces.Variable),
@@ -70,30 +47,38 @@ func ParseFile(content string) *File {
 		file.Vars[k] = result
 	}
 
-	for _, p := range file.Prompts {
+	file.parsePrompt()
+	file.parseVariable()
+	return file
+}
+
+func (f *File) parseVariable() {
+	for k, v := range f.Vars {
+		parsed := variable.ParseKeyValue(k, v)
+		if parsed == nil {
+			f.Exceptions = append(f.Exceptions, fmt.Errorf("failed to parse variable %s -> %s", k, v))
+			continue
+		}
+		f.ParsedVars[k] = parsed
+	}
+}
+
+func (f *File) parsePrompt() {
+	for promptId, p := range f.Prompts {
 		block := &Block{
 			Text: p,
 		}
 		parsed := block.Parse()
 		if parsed == nil {
-			fmt.Println("Failed to parse prompt", p)
+			f.Exceptions = append(f.Exceptions, fmt.Errorf("failed to parse prompt %d", promptId))
 		}
 		for _, v := range parsed.VarList {
-			if _, ok := file.Vars[v]; !ok {
-				file.Vars[v] = ""
+			if _, ok := f.Vars[v]; !ok {
+				f.Vars[v] = ""
 			}
 		}
-		file.ParsedPrompt = append(file.ParsedPrompt, parsed)
+		f.ParsedPrompt = append(f.ParsedPrompt, parsed)
 	}
-
-	for k, v := range file.Vars {
-		parsed := variable.ParseKeyValue(k, v)
-		if parsed == nil {
-			fmt.Println("Failed to parse variable", k, v)
-		}
-		file.ParsedVars[k] = parsed
-	}
-	return file
 }
 
 func ParseUnstructuredFile(content string) *File {
@@ -106,51 +91,22 @@ func ParseUnstructuredFile(content string) *File {
 			Provider: "openai",
 		},
 	}
-	for _, p := range file.Prompts {
-		block := &Block{
-			Text: p,
-		}
-		parsed := block.Parse()
-		if parsed == nil {
-			fmt.Println("Failed to parse prompt", p)
-		}
-		for _, v := range parsed.VarList {
-			if _, ok := file.Vars[v]; !ok {
-				file.Vars[v] = ""
-			}
-		}
-		file.ParsedPrompt = append(file.ParsedPrompt, parsed)
-	}
 
-	for k, v := range file.Vars {
-		parsed := variable.ParseKeyValue(k, v)
-		if parsed == nil {
-			fmt.Println("Failed to parse variable", k, v)
-		}
-		file.ParsedVars[k] = parsed
-	}
+	file.parsePrompt()
+	file.parseVariable()
 	return file
-}
-
-type CompiledPrompt struct {
-	Prompt string
-	Extra  map[string]any
-}
-
-type CompiledFile struct {
-	Info         FileInfo
-	Conf         *Conf
-	Prompts      []CompiledPrompt
-	CompiledVars map[string]string
 }
 
 func (f *File) Compile(vars map[string]string) *CompiledFile {
 	//varMap := make(map[string]string)
+	fileFatal := false
 	compiledVars := make(map[string]string)
+	var errs []error
+	errs = append(errs, f.Exceptions...)
 	for k, v := range f.ParsedVars {
 		if val, ok := vars[k]; ok {
 			if setted := v.SetValue(val); !setted {
-				fmt.Println("Failed to set value", k, val)
+				errs = append(errs, fmt.Errorf("failed to set value %s %s", k, val))
 				continue
 			}
 			compiledVars[k] = v.Value()
@@ -158,16 +114,26 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 	}
 	var result []CompiledPrompt
 	for _, p := range f.ParsedPrompt {
-		compiled := p.Compile(compiledVars)
+		compiled, exp, fatal := p.Compile(compiledVars)
+		if len(exp) > 0 {
+			errs = append(errs, exp...)
+		}
+		if fatal {
+			fileFatal = true
+			goto compiled
+		}
 		result = append(result, CompiledPrompt{
 			Prompt: compiled,
 			Extra:  p.Extra,
 		})
 	}
+compiled:
 	return &CompiledFile{
+		Fatal:        fileFatal,
 		Info:         f.FileInfo,
 		Conf:         f.Conf,
 		Prompts:      result,
 		CompiledVars: compiledVars,
+		Exceptions:   errs,
 	}
 }

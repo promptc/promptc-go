@@ -63,4 +63,8 @@ func CompileHandler(args []string) {
 		shared.InfoF("Prompt:")
 		fmt.Println(c.Prompt)
 	}
+	shared.ErrorF("Compiled Exceptions: ")
+	for _, e := range compiled.Exceptions {
+		fmt.Println(e)
+	}
 }

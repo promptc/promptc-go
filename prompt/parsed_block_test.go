@@ -24,12 +24,16 @@ Prompt Compiled: {%
 		Text: text,
 	}
 	parsed := b.Parse()
-	rst := parsed.Compile(varMap)
+	rst, exp, fatal := parsed.Compile(varMap)
 	fmt.Println(rst)
+	fmt.Println(exp)
+	fmt.Println(fatal)
 
 	varMap["x"] = "1"
-	rst = parsed.Compile(varMap)
+	rst, exp, fatal = parsed.Compile(varMap)
 	fmt.Println(rst)
+	fmt.Println(exp)
+	fmt.Println(fatal)
 
 }
 
@@ -63,11 +67,15 @@ Prompt Compiled: {%E
 	}
 	fmt.Println(string(Njson))
 
-	rst := parsed.Compile(varMap)
+	rst, exp, fatal := parsed.Compile(varMap)
 	fmt.Println(rst)
+	fmt.Println(exp)
+	fmt.Println(fatal)
 
 	varMap["x"] = "1"
-	rst = parsed.Compile(varMap)
+	rst, exp, fatal = parsed.Compile(varMap)
 	fmt.Println(rst)
+	fmt.Println(exp)
+	fmt.Println(fatal)
 
 }
