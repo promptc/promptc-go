@@ -17,6 +17,7 @@ func SimpleRunHandler(args []string) {
 	}
 	path := args[0]
 	input := ""
+	inputs := args[1:]
 	if len(args) == 2 {
 		input = args[1]
 	}
@@ -30,7 +31,7 @@ func SimpleRunHandler(args []string) {
 	} else {
 		file = prompt.ParseUnstructuredFile(txt)
 	}
-	if len(file.Vars) > 1 {
+	if len(file.Vars) > 1 || (len(inputs) == 0 && len(file.Vars) > 0) {
 		fmt.Println("Required following vars:")
 		for k, v := range file.Vars {
 			fmt.Println("-", k, "->", v)
@@ -42,6 +43,11 @@ func SimpleRunHandler(args []string) {
 		for k, _ := range file.Vars {
 			varMap[k] = input
 		}
+	} else {
+		if len(file.Prompts) == 0 {
+			panic("No prompts")
+		}
+		file.Prompts[len(file.Prompts)-1] += "\n" + strings.Join(inputs, " ")
 	}
 	printSep()
 	printInfo(file.FileInfo)
