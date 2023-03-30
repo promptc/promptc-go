@@ -53,6 +53,17 @@ x=111
 var1=This is a variable
 ```
 
+## ChatGPT<sup>Beta</sup>
+
+It should work as ChatGPT (but will not work as same as ChatGPT, cuz my code sucks)
+
+```sh
+$ promptc chat
+YOU> Hello
+GPT> Hello! How can I assist you today?
+YOU> 
+````
+
 ## Run Promptc
 
 ### Simple Run/Implicit Run
