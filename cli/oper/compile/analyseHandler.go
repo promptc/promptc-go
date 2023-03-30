@@ -35,7 +35,7 @@ func analyseFile(f *prompt.File) {
 		return
 	}
 	shared.InfoF("Vars in File: ")
-	for i, v := range f.ParsedVars {
+	for i, v := range f.VarConstraint {
 		fmt.Printf("%s: %#v\n%#v\n", i, v, v.Constraint())
 	}
 	shared.InfoF("Blocks in File: ")

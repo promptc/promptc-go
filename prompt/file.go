@@ -9,8 +9,8 @@ import (
 
 func ParseFile(content string) *File {
 	file := &File{
-		ParsedVars: make(map[string]interfaces.Variable),
-		Vars:       make(map[string]string),
+		VarConstraint: make(map[string]interfaces.Variable),
+		Vars:          make(map[string]string),
 	}
 	var fileM map[string]any
 	var hjsonResult any
@@ -56,7 +56,7 @@ func (f *File) parseVariable() {
 	for k, v := range f.Vars {
 		parsed, err := variable.ParseKeyValue(k, v)
 		if parsed != nil {
-			f.ParsedVars[k] = parsed
+			f.VarConstraint[k] = parsed
 		}
 		if err != nil {
 			f.Exceptions = append(f.Exceptions, fmt.Errorf("failed to parse variable %s -> %s", k, v))
@@ -85,9 +85,9 @@ func (f *File) parsePrompt() {
 
 func ParseUnstructuredFile(content string) *File {
 	file := &File{
-		ParsedVars: make(map[string]interfaces.Variable),
-		Vars:       make(map[string]string),
-		Prompts:    []string{content},
+		VarConstraint: make(map[string]interfaces.Variable),
+		Vars:          make(map[string]string),
+		Prompts:       []string{content},
 		Conf: &Conf{
 			Model:    "gpt-3.5-turbo",
 			Provider: "openai",
@@ -105,7 +105,7 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 	compiledVars := make(map[string]string)
 	var errs []error
 	errs = append(errs, f.Exceptions...)
-	for k, v := range f.ParsedVars {
+	for k, v := range f.VarConstraint {
 		if val, ok := vars[k]; ok {
 			if setted := v.SetValue(val); !setted {
 				errs = append(errs, fmt.Errorf("failed to set value %s %s", k, val))

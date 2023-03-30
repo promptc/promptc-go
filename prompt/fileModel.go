@@ -16,12 +16,12 @@ type FileInfo struct {
 
 type File struct {
 	FileInfo
-	Conf         *Conf                          `json:"conf"`
-	Prompts      []string                       `json:"prompts"`
-	Vars         map[string]string              `json:"vars"`
-	ParsedVars   map[string]interfaces.Variable `json:"-"`
-	ParsedPrompt []*ParsedBlock                 `json:"-"`
-	Exceptions   []error                        `json:"-"`
+	Conf          *Conf                          `json:"conf"`
+	Prompts       []string                       `json:"prompts"`
+	Vars          map[string]string              `json:"vars"`
+	VarConstraint map[string]interfaces.Variable `json:"-"`
+	ParsedPrompt  []*ParsedBlock                 `json:"-"`
+	Exceptions    []error                        `json:"-"`
 }
 
 var reserved = []string{"conf", "prompts", "vars", "author", "license", "project", "version"}
