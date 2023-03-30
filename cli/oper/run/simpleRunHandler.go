@@ -82,40 +82,7 @@ func SimpleRunHandler(args []string) {
 		Extra: nil,
 	}
 	printSep()
-	if !providerDriver.StreamAvailable() {
-		resp, err := providerDriver.GetResponse(toSend)
-		if err != nil {
-			panic(err)
-		}
-		for i, r := range resp {
-			console.Blue.AsForeground().WriteLine("Response #%d:", i)
-			fmt.Println(r)
-		}
-	} else {
-		console.Blue.AsForeground().WriteLine("Response #%d:", 0)
-		streamer := providerDriver.ToStream()
-		resp, err := streamer.GetStreamResponse(toSend)
-		if err != nil {
-			panic(err)
-		}
-		defer resp.Close()
-		for {
-			r, err, eof := resp.Receive()
-			if eof {
-				fmt.Println()
-				break
-			}
-			if err != nil {
-				panic(err)
-			}
-			lenOfR := len(r)
-			if lenOfR == 0 {
-				continue
-			}
-			fmt.Print(r[0])
-		}
-	}
-
+	runPrompt(providerDriver, toSend)
 }
 
 func printSep() {
