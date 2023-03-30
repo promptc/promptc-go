@@ -19,7 +19,16 @@
 
 ```sh
 # As simple as it should be
-> promptc $prompt $input
+$ promptc $prompt $input
+```
+
+<p align="center">
+  <img src="docs/img/chat.png" />
+  <em>Chat function</em>
+</p>
+
+```sh
+$ promptc chat
 ```
 
 More info about promptc-cli, please refer to [docs/cli.md](docs/cli.md).
