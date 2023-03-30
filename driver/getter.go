@@ -21,3 +21,7 @@ func GetDriver(provider, model, token string) (interfaces.ProviderDriver, error)
 	}
 	return nil, ErrProviderNotFound
 }
+
+func GetDefaultDriver(token string) interfaces.ProviderDriver {
+	return chatgpt_driver.New(token)
+}

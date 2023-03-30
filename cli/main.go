@@ -33,6 +33,8 @@ func main() {
 		handler = compile.CompileHandler
 	case "analyse":
 		handler = compile.AnalyseHandler
+	case "blank":
+		handler = run.BlankHandler
 	default:
 		handler = run.SimpleRunHandler
 		keepVerb = true
