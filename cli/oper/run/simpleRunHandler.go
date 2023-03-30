@@ -31,14 +31,19 @@ func SimpleRunHandler(args []string) {
 	} else {
 		file = prompt.ParseUnstructuredFile(txt)
 	}
+	varMap := make(map[string]string)
 	if len(file.Vars) > 1 || (len(inputs) == 0 && len(file.Vars) > 0) {
-		fmt.Println("Required following vars:")
+		fmt.Println("Please enter following vars:")
 		for k, v := range file.Vars {
-			fmt.Println("-", k, "->", v)
+			fmt.Print(k, " (", v, "): ")
+			input, err := console.ReadLine()
+			if err != nil {
+				panic(err)
+			}
+			varMap[k] = input
 		}
 		panic("Too many vars")
 	}
-	varMap := make(map[string]string)
 	if len(file.Vars) == 1 {
 		for k, _ := range file.Vars {
 			varMap[k] = input
