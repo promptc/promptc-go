@@ -2,7 +2,6 @@ package run
 
 import (
 	"fmt"
-	"github.com/KevinZonda/GoX/pkg/console"
 	"github.com/promptc/promptc-go/cli/oper/cfg"
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/driver"
@@ -57,14 +56,7 @@ func RunHandler(args []string) {
 		Model: model,
 		Extra: nil,
 	}
-	resp, err := providerDriver.GetResponse(toSend)
-	if err != nil {
-		panic(err)
-	}
-	for i, r := range resp {
-		console.Blue.AsForeground().WriteLine("Prompt #%d:", i)
-		fmt.Println(r)
-	}
+	shared.RunPrompt(providerDriver, toSend, shared.DefaultResponseBefore)
 }
 
 func convCompiledToSend(c prompt.CompiledPrompt) models.PromptItem {

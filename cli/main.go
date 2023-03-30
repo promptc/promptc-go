@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/promptc/promptc-go/cli/oper/cfg"
+	"github.com/promptc/promptc-go/cli/oper/chat"
 	"github.com/promptc/promptc-go/cli/oper/compile"
 	"github.com/promptc/promptc-go/cli/oper/help"
 	"github.com/promptc/promptc-go/cli/oper/run"
@@ -35,6 +36,8 @@ func main() {
 		handler = compile.AnalyseHandler
 	case "blank":
 		handler = run.BlankHandler
+	case "chat":
+		handler = chat.ChatHandler
 	default:
 		handler = run.SimpleRunHandler
 		keepVerb = true

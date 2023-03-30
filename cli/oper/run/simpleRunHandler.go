@@ -5,6 +5,7 @@ import (
 	"github.com/KevinZonda/GoX/pkg/console"
 	"github.com/KevinZonda/GoX/pkg/iox"
 	"github.com/promptc/promptc-go/cli/oper/cfg"
+	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/driver"
 	"github.com/promptc/promptc-go/driver/models"
 	"github.com/promptc/promptc-go/prompt"
@@ -82,7 +83,7 @@ func SimpleRunHandler(args []string) {
 		Extra: nil,
 	}
 	printSep()
-	runPrompt(providerDriver, toSend)
+	shared.RunPrompt(providerDriver, toSend, shared.DefaultResponseBefore)
 }
 
 func printSep() {
