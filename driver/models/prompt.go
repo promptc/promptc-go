@@ -1,7 +1,9 @@
 package models
 
+import "github.com/promptc/promptc-go/prompt"
+
 type PromptToSend struct {
-	Model string
+	Conf  prompt.Conf
 	Items []PromptItem
 	Extra map[string]any
 }

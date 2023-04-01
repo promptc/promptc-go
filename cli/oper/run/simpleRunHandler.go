@@ -92,7 +92,7 @@ func SimpleRunHandler(args []string) {
 	}
 	toSend := models.PromptToSend{
 		Items: items,
-		Model: model,
+		Conf:  file.GetConf(),
 		Extra: nil,
 	}
 	printSep()

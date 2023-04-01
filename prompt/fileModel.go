@@ -1,8 +1,15 @@
 package prompt
 
-import "github.com/promptc/promptc-go/variable/interfaces"
+import (
+	"github.com/promptc/promptc-go/variable/interfaces"
+)
+
+type DriverExtra struct {
+	Temperature *float32 `json:"temperature,omitempty"`
+}
 
 type Conf struct {
+	DriverExtra
 	Model    string `json:"model,omitempty,default=gpt-3.5-turbo"`
 	Provider string `json:"provider,omitempty,default=openai"`
 }

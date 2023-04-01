@@ -15,8 +15,11 @@ func New(token string) *ChatGPTDriver {
 
 func factoryRequest(p models.PromptToSend) openai.ChatCompletionRequest {
 	req := openai.ChatCompletionRequest{
-		Model:    p.Model,
+		Model:    p.Conf.Model,
 		Messages: getMessages(p),
+	}
+	if p.Conf.Temperature != nil {
+		req.Temperature = *p.Conf.Temperature
 	}
 	return req
 }

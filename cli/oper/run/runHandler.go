@@ -53,7 +53,7 @@ func RunHandler(args []string) {
 	}
 	toSend := models.PromptToSend{
 		Items: items,
-		Model: model,
+		Conf:  file.GetConf(),
 		Extra: nil,
 	}
 	shared.RunPrompt(providerDriver, toSend, shared.DefaultResponseBefore)

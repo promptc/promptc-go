@@ -7,6 +7,7 @@ import (
 	"github.com/promptc/promptc-go/driver"
 	"github.com/promptc/promptc-go/driver/interfaces"
 	"github.com/promptc/promptc-go/driver/models"
+	"github.com/promptc/promptc-go/prompt"
 )
 
 func ChatHandler(args []string) {
@@ -41,7 +42,9 @@ func runGPT(drv interfaces.ProviderDriver, userInput []string, gptInput []string
 	}
 	toSend := models.PromptToSend{
 		Items: prmpt,
-		Model: "gpt-3.5-turbo",
+		Conf: prompt.Conf{
+			Model: "gpt-3.5-turbo",
+		},
 	}
 	rst := shared.RunPrompt(drv, toSend, func(id int) {
 		console.Blue.AsForeground().Write("GPT> ")

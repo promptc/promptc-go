@@ -6,6 +6,7 @@ import (
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/driver"
 	"github.com/promptc/promptc-go/driver/models"
+	"github.com/promptc/promptc-go/prompt"
 	"strings"
 )
 
@@ -21,7 +22,9 @@ func BlankHandler(args []string) {
 				Content: strings.Join(args, ""),
 			},
 		},
-		Model: "gpt-3.5-turbo",
+		Conf: prompt.Conf{
+			Model: "gpt-3.5-turbo",
+		},
 		Extra: nil,
 	}
 	shared.RunPrompt(providerDriver, toSend, shared.DefaultResponseBefore)

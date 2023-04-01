@@ -15,7 +15,10 @@ func New(token string) *GPT3Driver {
 
 func factoryRequest(p models.PromptToSend) openai.CompletionRequest {
 	req := openai.CompletionRequest{
-		Model: p.Model,
+		Model: p.Conf.Model,
+	}
+	if p.Conf.Temperature != nil {
+		req.Temperature = *p.Conf.Temperature
 	}
 	for _, _p := range p.Items {
 		if _p.Content == "" {
