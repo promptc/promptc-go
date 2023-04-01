@@ -69,8 +69,8 @@ func SimpleRunHandler(args []string) {
 		fmt.Println(c.Prompt)
 	}
 
-	provider := strings.ToLower(strings.TrimSpace(file.Conf.Provider))
-	model := strings.ToLower(strings.TrimSpace(file.Conf.Model))
+	provider := strings.ToLower(strings.TrimSpace(file.GetConf().Provider))
+	model := strings.ToLower(strings.TrimSpace(file.GetConf().Model))
 	providerDriver, err := driver.GetDriver(provider, model, cfg.GetCfg().GetToken(provider))
 
 	var items []models.PromptItem

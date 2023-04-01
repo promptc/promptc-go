@@ -24,6 +24,16 @@ type File struct {
 	Exceptions    []error                        `json:"-"`
 }
 
+func (f *File) GetConf() Conf {
+	if f.Conf == nil {
+		return Conf{
+			Provider: "openai",
+			Model:    "gpt-3.5-turbo",
+		}
+	}
+	return *f.Conf
+}
+
 var reserved = []string{"conf", "prompts", "vars", "author", "license", "project", "version"}
 
 type CompiledPrompt struct {
