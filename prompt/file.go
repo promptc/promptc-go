@@ -114,6 +114,11 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 			compiledVars[k] = v.Value()
 		}
 	}
+	for k, v := range f.Vars {
+		if _, ok := compiledVars[k]; !ok {
+			compiledVars[k] = v
+		}
+	}
 	var result []CompiledPrompt
 	for _, p := range f.ParsedPrompt {
 		compiled, exp, fatal := p.Compile(compiledVars)
