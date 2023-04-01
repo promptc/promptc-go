@@ -20,6 +20,9 @@ func factoryRequest(p models.PromptToSend) openai.CompletionRequest {
 	if p.Conf.Temperature != nil {
 		req.Temperature = *p.Conf.Temperature
 	}
+	if len(p.Conf.Stop) > 0 {
+		req.Stop = p.Conf.Stop
+	}
 	for _, _p := range p.Items {
 		if _p.Content == "" {
 			continue

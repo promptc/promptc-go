@@ -6,6 +6,7 @@ import (
 
 type DriverExtra struct {
 	Temperature *float32 `json:"temperature,omitempty"`
+	Stop        []string `json:"stop,omitempty"`
 }
 
 type Conf struct {

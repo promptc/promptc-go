@@ -21,6 +21,9 @@ func factoryRequest(p models.PromptToSend) openai.ChatCompletionRequest {
 	if p.Conf.Temperature != nil {
 		req.Temperature = *p.Conf.Temperature
 	}
+	if len(p.Conf.Stop) > 0 {
+		req.Stop = p.Conf.Stop
+	}
 	return req
 }
 
