@@ -11,6 +11,15 @@ author: KevinZonda
 license: MIT
 version: 0.0.1
 
+// define configs
+conf: {
+  provider: openai
+  model: gpt-3.5-turbo
+  temperature: 0.5
+  stop: ['Hello', '4.0']
+}
+
+
 // define variable constraint
 vars: {
     x: int

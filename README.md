@@ -38,23 +38,31 @@ More info about promptc-cli, please refer to [docs/cli.md](docs/cli.md).
 Structured Prompt File:
 
 ```ts
-// meta info
+// [Optional] meta info
 project: test
 author: KevinZonda
 license: MIT
 version: 0.0.1
 
-// define variable constraint
+// [Optional] define configs
+conf: {
+  provider: openai
+  model: gpt-3.5-turbo
+  temperature: 0.5
+  stop: ['Hello', '4.0']
+}
+
+// [Optional] define variable constraint
 vars: {
     x: int
     // var x with int type
     y: int {min: 0, max: 10}
     z: int {min: 0, max: 10, default: '5'}
 }
-// wild way to define var
+// [Optional] wild way to define var
 a: int {min: 0, max: 10}
 
-// define prompts
+// [Required] define prompts
 prompts: [
     // role: 'user' is meta info for ChatGPT
     // to make it empty, use {}
