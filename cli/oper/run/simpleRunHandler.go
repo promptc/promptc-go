@@ -72,6 +72,7 @@ func SimpleRunHandler(args []string) {
 		fmt.Println(c.Prompt)
 	}
 	if len(compiled.Exceptions) > 0 {
+		printSep()
 		shared.ErrorF("Compiled Exceptions: ")
 		for _, e := range compiled.Exceptions {
 			fmt.Println(e)
