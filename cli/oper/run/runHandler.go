@@ -40,8 +40,8 @@ func RunHandler(args []string) {
 
 	varMap := shared.IniToMap(string(varBs))
 	file := prompt.ParseFile(string(promptBs))
-	provider := strings.ToLower(strings.TrimSpace(file.Conf.Provider))
-	model := strings.ToLower(strings.TrimSpace(file.Conf.Model))
+	provider := strings.ToLower(strings.TrimSpace(file.GetConf().Provider))
+	model := strings.ToLower(strings.TrimSpace(file.GetConf().Model))
 	providerDriver, err := driver.GetDriver(provider, model, cfg.GetCfg().GetToken(provider))
 	if err != nil {
 		panic(err)
