@@ -9,3 +9,17 @@ func Hjson(a any) string {
 	}
 	return string(bs)
 }
+
+func HjsonNoIdent(a any) string {
+	if a == nil {
+		return ""
+	}
+	bs, err := hjson.MarshalWithOptions(a, hjson.EncoderOptions{
+		IndentBy:       "",
+		EmitRootBraces: false,
+	})
+	if err != nil {
+		return err.Error()
+	}
+	return string(bs)
+}

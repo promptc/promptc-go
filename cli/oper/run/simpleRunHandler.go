@@ -9,6 +9,7 @@ import (
 	"github.com/promptc/promptc-go/driver"
 	"github.com/promptc/promptc-go/driver/models"
 	"github.com/promptc/promptc-go/prompt"
+	"github.com/promptc/promptc-go/utils"
 	"strings"
 )
 
@@ -32,6 +33,7 @@ func SimpleRunHandler(args []string) {
 	} else {
 		file = prompt.ParseUnstructuredFile(txt)
 	}
+
 	varMap := make(map[string]string)
 	if len(file.Vars) > 1 || (len(inputs) == 0 && len(file.Vars) > 0) {
 		fmt.Println("Please enter following vars:")
@@ -66,8 +68,14 @@ func SimpleRunHandler(args []string) {
 	compiled := file.Compile(varMap)
 	fmt.Println("Compiled To: ")
 	for i, c := range compiled.Prompts {
-		shared.InfoF("Prompt #%d: ", i)
+		shared.InfoF("Prompt #%d [%s]: ", i, utils.HjsonNoIdent(c.Extra))
 		fmt.Println(c.Prompt)
+	}
+	if len(compiled.Exceptions) > 0 {
+		shared.ErrorF("Compiled Exceptions: ")
+		for _, e := range compiled.Exceptions {
+			fmt.Println(e)
+		}
 	}
 
 	provider := strings.ToLower(strings.TrimSpace(file.GetConf().Provider))
