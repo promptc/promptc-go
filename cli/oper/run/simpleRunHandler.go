@@ -65,13 +65,17 @@ func SimpleRunHandler(args []string) {
 	printSep()
 	compiled := file.Compile(varMap)
 	fmt.Println("Compiled To: ")
-	for _, c := range compiled.Prompts {
+	for i, c := range compiled.Prompts {
+		shared.InfoF("Prompt #%d: ", i)
 		fmt.Println(c.Prompt)
 	}
 
 	provider := strings.ToLower(strings.TrimSpace(file.GetConf().Provider))
 	model := strings.ToLower(strings.TrimSpace(file.GetConf().Model))
 	providerDriver, err := driver.GetDriver(provider, model, cfg.GetCfg().GetToken(provider))
+	if err != nil {
+		panic(err)
+	}
 
 	var items []models.PromptItem
 	for _, c := range compiled.Prompts {
