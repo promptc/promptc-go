@@ -126,7 +126,7 @@ func printInfo(f prompt.FileInfo) {
 		sb.WriteString("\n")
 	}
 	if sb.Len() > 0 {
-		fmt.Println(sb.String())
+		fmt.Print(sb.String())
 	} else {
 		fmt.Println("No info provided by prompt file")
 	}
