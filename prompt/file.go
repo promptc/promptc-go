@@ -114,7 +114,7 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 			compiledVars[k] = v.Value()
 		}
 	}
-	for k, v := range f.Vars {
+	for k, v := range vars {
 		if _, ok := compiledVars[k]; !ok {
 			compiledVars[k] = v
 		}
