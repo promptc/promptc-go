@@ -1,7 +1,10 @@
 package chat
 
 import (
+	"errors"
+	"fmt"
 	"github.com/KevinZonda/GoX/pkg/console"
+	"github.com/chzyer/readline"
 	"github.com/promptc/promptc-go/cli/oper/cfg"
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/driver"
@@ -13,10 +16,29 @@ import (
 func ChatHandler(args []string) {
 	var userInput []string
 	var gptInput []string
+
+	userInputHint := "YOU> "
+
+	colourPrefix, needReset := console.Green.AsForeground().ConsoleString()
+	userInputHint = colourPrefix + userInputHint
+	if needReset {
+		userInputHint += console.ResetColourSymbol
+	}
+
+	rl, err := readline.New(userInputHint)
+	if err != nil {
+		panic(err)
+	}
 	providerDriver := driver.GetDefaultDriver(cfg.GetCfg().GetToken("openai"))
 	for {
-		console.Green.AsForeground().Write("YOU> ")
-		line, _ := console.ReadLine()
+		line, err := rl.Readline()
+		if err != nil {
+			if errors.Is(err, readline.ErrInterrupt) {
+				break
+			}
+			fmt.Println(err)
+			break
+		}
 		userInput = append(userInput, line)
 		gptInput = runGPT(providerDriver, userInput, gptInput)
 	}
