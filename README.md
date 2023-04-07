@@ -5,7 +5,10 @@
 
 `promptc-go` is a go implementation of `promptc`. It uses
 `promptc` specification to generate, analyse, build, compile & run
-`promptc` files.
+`promptc` files and aims to generalise the way to do Prompt Engineering.
+
+`promptc` is a `OpenAPI`-like specification for Prompt Engineering.
+
 
 ## promptc-cli
 

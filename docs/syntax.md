@@ -207,3 +207,20 @@ If enter `x = 1`, the result will be:
 You Entered: 1
 Prompt Compiled: Hello
 ```
+
+### Ref Block
+
+A when block's block mention is block type is `ref`, then this block will be handled as a reference block.
+
+```
+'''type: 'ref'
+ref: 'lib/translate.prompt'
+vars: {
+    lang: 'en'       // Will be handled as string 'en'
+    text: '$input'   // Will be handled as variable input's content
+    extra: '$$extra' // Will be handled as string $extra
+    s: 'x$$z'        // Will be handled as string x$$z
+    z: 'x$'          // Will be handled as string x$
+}
+'''
+```
