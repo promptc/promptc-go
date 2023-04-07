@@ -2,7 +2,6 @@ package types
 
 import (
 	"errors"
-	"github.com/promptc/promptc-go/utils"
 	"github.com/promptc/promptc-go/variable/interfaces"
 	"strconv"
 )
@@ -28,7 +27,7 @@ func (i *IntConstraint) CanFit(v string) bool {
 }
 
 func (i *IntConstraint) String() string {
-	return utils.Hjson(*i)
+	return hjsonNoIndent(*i)
 }
 
 func (i *IntConstraint) Validate() error {
