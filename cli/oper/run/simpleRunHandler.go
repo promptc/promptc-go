@@ -9,7 +9,9 @@ import (
 	"github.com/promptc/promptc-go/driver"
 	"github.com/promptc/promptc-go/driver/models"
 	"github.com/promptc/promptc-go/prompt"
+	ptProvider "github.com/promptc/promptc-go/prompt/provider"
 	"github.com/promptc/promptc-go/utils"
+	"path/filepath"
 	"strings"
 )
 
@@ -32,6 +34,9 @@ func SimpleRunHandler(args []string) {
 		file = prompt.ParseFile(txt)
 	} else {
 		file = prompt.ParseUnstructuredFile(txt)
+	}
+	file.RefProvider = &ptProvider.FileProvider{
+		BasePath: filepath.Dir(path),
 	}
 
 	varMap := make(map[string]string)

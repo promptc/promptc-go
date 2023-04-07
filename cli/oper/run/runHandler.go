@@ -2,13 +2,14 @@ package run
 
 import (
 	"fmt"
+	"github.com/KevinZonda/GoX/pkg/iox"
 	"github.com/promptc/promptc-go/cli/oper/cfg"
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/driver"
 	"github.com/promptc/promptc-go/driver/models"
 	"github.com/promptc/promptc-go/prompt"
-	"io"
-	"os"
+	ptProvider "github.com/promptc/promptc-go/prompt/provider"
+	"path/filepath"
 	"strings"
 )
 
@@ -19,27 +20,20 @@ func RunHandler(args []string) {
 	}
 	promptPath := args[0]
 	varPath := args[1]
-	promptF, err := os.Open(promptPath)
+	promptStr, err := iox.ReadAllText(promptPath)
 	if err != nil {
 		panic(err)
 	}
-	promptBs, err := io.ReadAll(promptF)
+	varStr, err := iox.ReadAllText(varPath)
 	if err != nil {
 		panic(err)
 	}
-	varF, err := os.Open(varPath)
-	if err != nil {
-		panic(err)
-	}
-	varBs, err := io.ReadAll(varF)
-	if err != nil {
-		panic(err)
-	}
-	// fmt.Println(string(varBs))
-	// fmt.Println(string(promptBs))
 
-	varMap := shared.IniToMap(string(varBs))
-	file := prompt.ParseFile(string(promptBs))
+	varMap := shared.IniToMap(varStr)
+	file := prompt.ParseFile(promptStr)
+	file.RefProvider = &ptProvider.FileProvider{
+		BasePath: filepath.Dir(promptPath),
+	}
 	provider := strings.ToLower(strings.TrimSpace(file.GetConf().Provider))
 	model := strings.ToLower(strings.TrimSpace(file.GetConf().Model))
 	providerDriver, err := driver.GetDriver(provider, model, cfg.GetCfg().GetToken(provider))
