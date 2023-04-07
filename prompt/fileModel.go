@@ -1,6 +1,7 @@
 package prompt
 
 import (
+	"github.com/promptc/promptc-go/prompt/provider"
 	"github.com/promptc/promptc-go/variable/interfaces"
 )
 
@@ -30,6 +31,7 @@ type File struct {
 	VarConstraint map[string]interfaces.Variable `json:"-"`
 	ParsedPrompt  []*ParsedBlock                 `json:"-"`
 	Exceptions    []error                        `json:"-"`
+	RefProvider   provider.Privider              `json:"-"`
 }
 
 func (f *File) GetConf() Conf {

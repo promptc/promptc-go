@@ -121,6 +121,20 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 	}
 	var result []CompiledPrompt
 	for _, p := range f.ParsedPrompt {
+		if p.Type() == RefBlock {
+			refB, _err := p.ToReferBlock()
+			if _err != nil {
+				errs = append(errs, _err)
+				continue
+			}
+			compiled, _errs := refB.Compile(compiledVars)
+			if _err != nil {
+				errs = append(errs, _errs...)
+				continue
+			}
+			result = append(result, compiled...)
+
+		}
 		compiled, exp, fatal := p.Compile(compiledVars)
 		if len(exp) > 0 {
 			errs = append(errs, exp...)

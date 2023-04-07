@@ -2,11 +2,13 @@ package prompt
 
 import (
 	"github.com/hjson/hjson-go/v4"
+	"github.com/promptc/promptc-go/prompt/provider"
 	"strings"
 )
 
 type Block struct {
-	Text string
+	Text        string
+	RefProvider provider.Privider
 }
 
 // Text := Alphabets | {{ | }}
@@ -138,10 +140,11 @@ func (b *Block) Parse() *ParsedBlock {
 		tokens = append(tokens, BlockToken{name, kind})
 	}
 	return &ParsedBlock{
-		Text:    b.Text,
-		VarList: varList,
-		Tokens:  tokens,
-		Extra:   extra,
+		Text:        b.Text,
+		VarList:     varList,
+		Tokens:      tokens,
+		Extra:       extra,
+		RefProvider: b.RefProvider,
 	}
 }
 
