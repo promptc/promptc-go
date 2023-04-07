@@ -133,7 +133,7 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 				continue
 			}
 			result = append(result, compiled...)
-
+			continue
 		}
 		compiled, exp, fatal := p.Compile(compiledVars)
 		if len(exp) > 0 {
