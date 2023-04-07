@@ -14,7 +14,8 @@ func (f *File) Formatted() string {
 
 	vars := make(map[string]string)
 	for k, v := range f.VarConstraint {
-		vars[k] = variable.ToPromptcString(v)
+
+		vars[k] = variable.ToPromptcValue(v)
 	}
 	nf.Vars = vars
 	for _, block := range f.ParsedPrompt {

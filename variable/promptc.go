@@ -15,3 +15,12 @@ func ToPromptcString(v interfaces.Variable) string {
 	}
 	return sb.String()
 }
+
+func ToPromptcValue(v interfaces.Variable) string {
+	sb := strings.Builder{}
+	sb.WriteString(v.Type())
+	if v.Constraint() != nil {
+		sb.WriteString(v.Constraint().String())
+	}
+	return sb.String()
+}
