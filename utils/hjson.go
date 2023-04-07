@@ -23,3 +23,16 @@ func HjsonNoIdent(a any) string {
 	}
 	return string(bs)
 }
+
+func HjsonNoBrace(a any) string {
+	if a == nil {
+		return ""
+	}
+	option := hjson.DefaultOptions()
+	option.EmitRootBraces = false
+	bs, err := hjson.MarshalWithOptions(a, option)
+	if err != nil {
+		return err.Error()
+	}
+	return string(bs)
+}

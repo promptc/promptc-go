@@ -29,6 +29,23 @@ func (b *Block) Parse() *ParsedBlock {
 		err := hjson.Unmarshal([]byte(firstLine), &extra)
 		if err != nil {
 			toParse = b.Text
+		} else {
+			if extraType, ok := extra["type"]; ok {
+				isRefBlock := strings.TrimSpace(extraType.(string)) == string(RefBlock)
+				if isRefBlock {
+					return &ParsedBlock{
+						Extra: extra,
+						Text:  toParse,
+						Tokens: []BlockToken{
+							{
+								Kind: BlockTokenKindLiter,
+								Text: toParse,
+							},
+						},
+						VarList: nil,
+					}
+				}
+			}
 		}
 	}
 	rs := []rune(toParse)

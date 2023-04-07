@@ -4,6 +4,7 @@ import (
 	"github.com/promptc/promptc-go/cli/oper/cfg"
 	"github.com/promptc/promptc-go/cli/oper/chat"
 	"github.com/promptc/promptc-go/cli/oper/compile"
+	"github.com/promptc/promptc-go/cli/oper/fmtt"
 	"github.com/promptc/promptc-go/cli/oper/help"
 	"github.com/promptc/promptc-go/cli/oper/run"
 	"github.com/promptc/promptc-go/cli/oper/shared"
@@ -38,6 +39,8 @@ func main() {
 		handler = run.BlankHandler
 	case "chat":
 		handler = chat.ChatHandler
+	case "fmt":
+		handler = fmtt.FormatHandler
 	default:
 		handler = run.SimpleRunHandler
 		keepVerb = true

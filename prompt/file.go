@@ -80,6 +80,7 @@ func (f *File) parsePrompt() {
 				f.Vars[v] = ""
 			}
 		}
+
 		f.ParsedPrompt = append(f.ParsedPrompt, parsed)
 	}
 }

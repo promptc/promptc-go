@@ -25,7 +25,7 @@ type FileInfo struct {
 
 type File struct {
 	FileInfo
-	Conf          *Conf                          `json:"conf"`
+	Conf          *Conf                          `json:"conf,omitempty"`
 	Prompts       []string                       `json:"prompts"`
 	Vars          map[string]string              `json:"vars"`
 	VarConstraint map[string]interfaces.Variable `json:"-"`
