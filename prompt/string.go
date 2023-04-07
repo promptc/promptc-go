@@ -29,8 +29,6 @@ func (f *File) OldStyle() string {
 	nf := f.Combine()
 	nf.parsePrompt()
 	sb := strings.Builder{}
-	fmt.Println(len(nf.Prompts))
-	fmt.Println(len(nf.ParsedPrompt))
 
 	for idx, block := range nf.ParsedPrompt {
 		if len(block.Extra) > 0 {
@@ -45,7 +43,6 @@ func (f *File) OldStyle() string {
 		idStr := fmt.Sprintf("%d: ", idx)
 		sb.WriteString(idStr)
 		for _, token := range block.Tokens {
-			fmt.Println(token)
 			switch token.Kind {
 			case BlockTokenKindVar:
 				sb.WriteString(fmt.Sprintf("%%%s%%", token.Text))
