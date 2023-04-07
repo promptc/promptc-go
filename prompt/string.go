@@ -1,13 +1,14 @@
 package prompt
 
 import (
+	"fmt"
 	"github.com/promptc/promptc-go/prompt/provider"
 	"github.com/promptc/promptc-go/utils"
 	"github.com/promptc/promptc-go/variable"
 	"strings"
 )
 
-func (f *File) Formatted() string {
+func (f *File) Combine() *File {
 	nf := File{
 		FileInfo: f.FileInfo,
 	}
@@ -21,6 +22,50 @@ func (f *File) Formatted() string {
 	for _, block := range f.ParsedPrompt {
 		nf.Prompts = append(nf.Prompts, block.Formatted(f.RefProvider)...)
 	}
+	return &nf
+}
+
+func (f *File) OldStyle() string {
+	nf := f.Combine()
+	nf.parsePrompt()
+	sb := strings.Builder{}
+	fmt.Println(len(nf.Prompts))
+	fmt.Println(len(nf.ParsedPrompt))
+
+	for idx, block := range nf.ParsedPrompt {
+		if len(block.Extra) > 0 {
+			role, ok := block.Extra["role"]
+			if ok {
+				sb.WriteString("R: ")
+				sb.WriteString(role.(string))
+				sb.WriteString("\n")
+			}
+		}
+
+		idStr := fmt.Sprintf("%d: ", idx)
+		sb.WriteString(idStr)
+		for _, token := range block.Tokens {
+			fmt.Println(token)
+			switch token.Kind {
+			case BlockTokenKindVar:
+				sb.WriteString(fmt.Sprintf("%%%s%%", token.Text))
+			case BlockTokenKindLiter:
+				txt := token.Text
+				txt = strings.ReplaceAll(txt, "%", "%%")
+				txt = strings.ReplaceAll(txt, "\n", "\n"+idStr)
+				sb.WriteString(txt)
+			case BlockTokenKindReservedQuota:
+				sb.WriteString("'''")
+			}
+		}
+		idx++
+		sb.WriteString("\n\n")
+	}
+	return strings.TrimSpace(sb.String())
+}
+
+func (f *File) Formatted() string {
+	nf := f.Combine()
 	return utils.HjsonNoBrace(nf)
 
 }

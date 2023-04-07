@@ -27,3 +27,23 @@ func FormatHandler(args []string) {
 	str := file.Formatted()
 	err = iox.WriteAllText(output, str)
 }
+
+func OldStyleFormatHandler(args []string) {
+	if len(args) != 2 {
+		fmt.Println("Usage: promptc old <input> <output>")
+		return
+	}
+	input := args[0]
+	output := args[1]
+
+	fileStr, err := iox.ReadAllText(input)
+	if err != nil {
+		panic(err)
+	}
+	file := prompt.ParseFile(fileStr)
+	file.RefProvider = &ptProvider.FileProvider{
+		BasePath: filepath.Dir(input),
+	}
+	str := file.OldStyle()
+	err = iox.WriteAllText(output, str)
+}

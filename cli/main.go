@@ -41,6 +41,8 @@ func main() {
 		handler = chat.ChatHandler
 	case "fmt":
 		handler = fmtt.FormatHandler
+	case "old":
+		handler = fmtt.OldStyleFormatHandler
 	default:
 		handler = run.SimpleRunHandler
 		keepVerb = true
