@@ -2,6 +2,7 @@ package prompt
 
 import (
 	"fmt"
+
 	"github.com/hjson/hjson-go/v4"
 	"github.com/promptc/promptc-go/variable"
 	"github.com/promptc/promptc-go/variable/interfaces"
@@ -122,7 +123,7 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 	var result []CompiledPrompt
 	for _, p := range f.ParsedPrompt {
 		if p.Type() == RefBlock {
-			refB, _err := p.ToReferBlock()
+			refB, _err := p.ToReferBlock(f.RefProvider)
 			if _err != nil {
 				errs = append(errs, _err)
 				continue

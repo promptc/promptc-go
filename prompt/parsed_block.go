@@ -10,11 +10,10 @@ import (
 )
 
 type ParsedBlock struct {
-	Text        string            `json:"-"`
-	VarList     []string          `json:"-"`
-	Tokens      []BlockToken      `json:"tokens"`
-	Extra       map[string]any    `json:"extra"`
-	RefProvider provider.Privider `json:"-"`
+	Text    string         `json:"-"`
+	VarList []string       `json:"-"`
+	Tokens  []BlockToken   `json:"tokens"`
+	Extra   map[string]any `json:"extra"`
 }
 
 type BlockType string
@@ -25,14 +24,18 @@ const (
 )
 
 func (p *ParsedBlock) Type() BlockType {
-	if p.Extra["type"] == nil {
-		return PromptBlock
-	}
-	t, ok := p.Extra["type"].(BlockType)
+	t, ok := p.Extra["type"]
 	if !ok {
 		return PromptBlock
 	}
-	return t
+	switch t {
+	case "ref":
+		return RefBlock
+	case "prompt":
+		return PromptBlock
+	default:
+		return PromptBlock
+	}
 }
 
 func (p *ParsedBlock) ToJson() ([]byte, error) {
@@ -112,25 +115,19 @@ type ReferBlock struct {
 	RefProvider provider.Privider `json:"-"`
 }
 
-func (p *ParsedBlock) ToReferBlock() (*ReferBlock, error) {
+func (p *ParsedBlock) ToReferBlock(refProvider provider.Privider) (*ReferBlock, error) {
 	if p.Type() != RefBlock {
 		return nil, errors.New("not a ref block")
 	}
-	if len(p.Tokens) != 1 {
-		return nil, errors.New("invalid ref block")
-	}
-	if p.Tokens[0].Kind != BlockTokenKindVar {
-		return nil, errors.New("invalid ref block content")
-	}
 	var refBlock ReferBlock
-	err := hjson.Unmarshal([]byte(p.Tokens[0].Text), &refBlock)
+	err := hjson.Unmarshal([]byte(p.Text), &refBlock)
 	if err != nil {
 		return nil, err
 	}
 	if refBlock.RefTo == "" {
 		return nil, errors.New("no invalid `ref`")
 	}
-	refBlock.RefProvider = p.RefProvider
+	refBlock.RefProvider = refProvider
 	if refBlock.RefProvider == nil {
 		return nil, errors.New("no ref provider")
 	}
@@ -144,14 +141,16 @@ func (r *ReferBlock) Compile(vars map[string]string) ([]CompiledPrompt, []error)
 	}
 	for k, v := range r.VarMap {
 		if strings.HasPrefix(v, "$") {
-			newV := vars[v[1:]]
+			newV := v[1:]
 			if strings.HasPrefix(newV, "$") {
 				newVars[k] = newV
 			} else {
 				newVars[k] = vars[newV]
 			}
+		} else {
+			newVars[k] = v
 		}
-		newVars[k] = v
+		//fmt.Println(k, "->", v)
 	}
 	promptTxt, err := r.RefProvider.GetPrompt(r.RefTo)
 	if err != nil {

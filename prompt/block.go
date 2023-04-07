@@ -140,11 +140,10 @@ func (b *Block) Parse() *ParsedBlock {
 		tokens = append(tokens, BlockToken{name, kind})
 	}
 	return &ParsedBlock{
-		Text:        b.Text,
-		VarList:     varList,
-		Tokens:      tokens,
-		Extra:       extra,
-		RefProvider: b.RefProvider,
+		Text:    b.Text,
+		VarList: varList,
+		Tokens:  tokens,
+		Extra:   extra,
 	}
 }
 

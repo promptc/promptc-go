@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/prompt"
+	"github.com/promptc/promptc-go/prompt/provider"
 	"github.com/promptc/promptc-go/utils"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 func CompileHandler(args []string) {
@@ -45,6 +47,9 @@ func CompileHandler(args []string) {
 	}
 
 	file := prompt.ParseFile(string(promptBs))
+	file.RefProvider = &provider.FileProvider{
+		BasePath: filepath.Dir(promptPath),
+	}
 	shared.InfoF("Prompt Conf: ")
 	fmt.Println(utils.Hjson(file.Conf))
 
