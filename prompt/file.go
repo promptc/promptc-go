@@ -123,7 +123,7 @@ func (f *File) Compile(vars map[string]string) *CompiledFile {
 	}
 	var result []CompiledPrompt
 	for _, p := range f.ParsedPrompt {
-		if p.Type() == RefBlock {
+		if p.IsRef() {
 			refB, _err := p.ToReferBlock(f.RefProvider)
 			if _err != nil {
 				errs = append(errs, _err)

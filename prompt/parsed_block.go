@@ -38,6 +38,10 @@ func (p *ParsedBlock) Type() BlockType {
 	}
 }
 
+func (p *ParsedBlock) IsRef() bool {
+	return p.Type() == RefBlock
+}
+
 func (p *ParsedBlock) ToJson() ([]byte, error) {
 	return json.Marshal(p)
 }
@@ -116,7 +120,7 @@ type ReferBlock struct {
 }
 
 func (p *ParsedBlock) ToReferBlock(refProvider provider.Privider) (*ReferBlock, error) {
-	if p.Type() != RefBlock {
+	if !p.IsRef() {
 		return nil, errors.New("not a ref block")
 	}
 	var refBlock ReferBlock

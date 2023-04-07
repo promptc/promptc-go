@@ -84,7 +84,7 @@ func (r *ReferBlock) Formatted(prov provider.Privider) []string {
 }
 
 func (p *ParsedBlock) Formatted(prov provider.Privider) []string {
-	if p.Type() == RefBlock {
+	if p.IsRef() {
 		ref, err := p.ToReferBlock(prov)
 		if err != nil {
 			return nil
