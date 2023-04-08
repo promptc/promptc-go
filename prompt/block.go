@@ -151,6 +151,8 @@ func (b *Block) Parse() *ParsedBlock {
 				kind = BlockTokenKindScript
 				if name == "Q" {
 					kind = BlockTokenKindReservedQuota
+				} else {
+					varList = append(varList, name)
 				}
 			}
 		}
