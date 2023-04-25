@@ -29,6 +29,13 @@ func (f *File) OldStyle() string {
 	nf := f.Combine()
 	nf.parsePrompt()
 	sb := strings.Builder{}
+	if f.Conf != nil {
+		if len(f.Conf.Stop) > 0 {
+			sb.WriteString("@: stop: ")
+			sb.WriteString(f.Conf.Stop[0])
+			sb.WriteString("\n")
+		}
+	}
 
 	for idx, block := range nf.ParsedPrompt {
 		if len(block.Extra) > 0 {
