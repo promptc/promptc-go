@@ -8,14 +8,16 @@ import (
 	"strings"
 )
 
-func (f *PromptC) Combine() *PromptC {
+// Copy returns a copy of the promptc file
+// this is not Clone, Copy will still contains
+// the same reference to the variable
+func (f *PromptC) Copy() *PromptC {
 	nf := PromptC{
-		FileInfo: f.FileInfo,
+		SharedInfo: f.SharedInfo,
 	}
 
 	vars := make(map[string]string)
 	for k, v := range f.VarConstraint {
-
 		vars[k] = variable.ToPromptcValue(v)
 	}
 	nf.Vars = vars
@@ -26,7 +28,7 @@ func (f *PromptC) Combine() *PromptC {
 }
 
 func (f *PromptC) OldStyle() string {
-	nf := f.Combine()
+	nf := f.Copy()
 	nf.parsePrompt()
 	sb := strings.Builder{}
 	if f.Conf != nil {
@@ -69,7 +71,7 @@ func (f *PromptC) OldStyle() string {
 }
 
 func (f *PromptC) Formatted() string {
-	nf := f.Combine()
+	nf := f.Copy()
 	return utils.HjsonNoBrace(nf)
 
 }
