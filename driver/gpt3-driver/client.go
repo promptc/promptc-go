@@ -1,6 +1,7 @@
 package gpt3_driver
 
 import (
+	gpt_provider "github.com/promptc/promptc-go/driver/gpt-provider"
 	"github.com/promptc/promptc-go/driver/models"
 	"github.com/sashabaranov/go-openai"
 )
@@ -9,8 +10,12 @@ type GPT3Driver struct {
 	Client *openai.Client
 }
 
+func NewWithProvider(token, provider string) *GPT3Driver {
+	return &GPT3Driver{Client: openai.NewClientWithConfig(gpt_provider.GetProviderConfig(token, provider))}
+}
+
 func New(token string) *GPT3Driver {
-	return &GPT3Driver{Client: openai.NewClient(token)}
+	return NewWithProvider(token, "openai")
 }
 
 func factoryRequest(p models.PromptToSend) openai.CompletionRequest {

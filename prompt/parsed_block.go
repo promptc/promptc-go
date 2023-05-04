@@ -160,7 +160,7 @@ func (r *ReferBlock) Compile(vars map[string]string) ([]CompiledPrompt, []error)
 	if err != nil {
 		return nil, []error{err}
 	}
-	prompt := ParsePrompt(promptTxt)
+	prompt := ParseBasicPrompt(promptTxt)
 	prompt.RefProvider = r.RefProvider
 	compiledPrompt := prompt.Compile(newVars)
 

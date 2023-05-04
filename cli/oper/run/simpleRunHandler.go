@@ -33,7 +33,7 @@ func SimpleRunHandler(args []string) {
 	if structured {
 		file = prompt.ParsePromptC(txt)
 	} else {
-		file = prompt.ParsePrompt(txt)
+		file = prompt.ParseBasicPrompt(txt)
 	}
 	file.RefProvider = &ptProvider.FileProvider{
 		BasePath: filepath.Dir(path),

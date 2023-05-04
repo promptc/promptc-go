@@ -85,7 +85,7 @@ func (f *PromptC) parsePrompt() {
 	}
 }
 
-func ParsePrompt(content string) *PromptC {
+func ParseBasicPrompt(content string) *PromptC {
 	file := &PromptC{
 		VarConstraint: make(map[string]interfaces.Variable),
 		Vars:          make(map[string]string),

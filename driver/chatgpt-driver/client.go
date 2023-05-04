@@ -1,6 +1,7 @@
 package chatgpt_driver
 
 import (
+	gpt_provider "github.com/promptc/promptc-go/driver/gpt-provider"
 	"github.com/promptc/promptc-go/driver/models"
 	"github.com/sashabaranov/go-openai"
 )
@@ -9,8 +10,14 @@ type ChatGPTDriver struct {
 	Client *openai.Client
 }
 
+func NewWithProvider(token, provider string) *ChatGPTDriver {
+	return &ChatGPTDriver{
+		Client: openai.NewClientWithConfig(gpt_provider.GetProviderConfig(token, provider)),
+	}
+}
+
 func New(token string) *ChatGPTDriver {
-	return &ChatGPTDriver{Client: openai.NewClient(token)}
+	return NewWithProvider(token, "openai")
 }
 
 func factoryRequest(p models.PromptToSend) openai.ChatCompletionRequest {

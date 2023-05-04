@@ -59,3 +59,7 @@ type CompiledFile struct {
 	CompiledVars map[string]string
 	Exceptions   []error
 }
+
+func ReservedKeys() []string {
+	return reserved
+}

@@ -120,7 +120,7 @@ func (r *ReferBlock) Formatted(prov provider.Privider) []string {
 	if err != nil {
 		return nil
 	}
-	prompt := ParsePrompt(promptTxt)
+	prompt := ParseBasicPrompt(promptTxt)
 	prompt.RefProvider = r.RefProvider
 	for _, block := range prompt.ParsedPrompt {
 		block.Tokens = TxTokens(block.Tokens, varMoveTx, vatToLiterTx)
