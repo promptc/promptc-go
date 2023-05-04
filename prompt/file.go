@@ -101,7 +101,7 @@ func ParseBasicPrompt(content string) *PromptC {
 	return file
 }
 
-func (f *PromptC) Compile(vars map[string]string) *CompiledFile {
+func (f *PromptC) Compile(vars map[string]string) *CompiledPromptC {
 	//varMap := make(map[string]string)
 	fileFatal := false
 	compiledVars := make(map[string]string)
@@ -151,7 +151,7 @@ func (f *PromptC) Compile(vars map[string]string) *CompiledFile {
 		})
 	}
 compiled:
-	return &CompiledFile{
+	return &CompiledPromptC{
 		Fatal:        fileFatal,
 		Info:         f.FileInfo,
 		Conf:         f.Conf,

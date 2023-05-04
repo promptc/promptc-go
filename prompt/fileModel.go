@@ -3,6 +3,7 @@ package prompt
 import (
 	"github.com/promptc/promptc-go/prompt/provider"
 	"github.com/promptc/promptc-go/variable/interfaces"
+	"github.com/sashabaranov/go-openai"
 )
 
 type DriverExtra struct {
@@ -51,7 +52,7 @@ type CompiledPrompt struct {
 	Extra  map[string]any
 }
 
-type CompiledFile struct {
+type CompiledPromptC struct {
 	Fatal        bool
 	Info         FileInfo
 	Conf         *Conf
@@ -62,4 +63,33 @@ type CompiledFile struct {
 
 func ReservedKeys() []string {
 	return reserved
+}
+
+func (c *CompiledPromptC) OpenAIChatCompletionMessages(ignoreEmptyPrompt bool) []openai.ChatCompletionMessage {
+	var messages []openai.ChatCompletionMessage
+	for _, _p := range c.Prompts {
+		if ignoreEmptyPrompt && _p.Prompt == "" {
+			continue
+		}
+
+		role := "user"
+		if len(_p.Extra) > 0 {
+			ok := false
+			var a any
+			a, ok = _p.Extra["role"]
+			if ok {
+				role, ok = a.(string)
+				if !ok {
+					role = "user"
+				}
+			}
+		}
+
+		message := openai.ChatCompletionMessage{
+			Role:    role,
+			Content: _p.Prompt,
+		}
+		messages = append(messages, message)
+	}
+	return messages
 }
