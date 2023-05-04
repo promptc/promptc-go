@@ -6,17 +6,8 @@ import (
 )
 
 type IntType struct {
-	value      int64
-	hasVal     bool
-	name       string
-	constraint interfaces.Constraint
-}
-
-func (i *IntType) Value() string {
-	if i.hasVal {
-		return strconv.FormatInt(i.value, 10)
-	}
-	return ""
+	BaseType
+	value int64
 }
 
 func (i *IntType) SetValue(s string) bool {
@@ -24,43 +15,20 @@ func (i *IntType) SetValue(s string) bool {
 		return false
 	}
 	i2, _ := strconv.ParseInt(s, 10, 64)
-	i.value = i2
-	i.hasVal = true
+	i.SetValueInternal(strconv.FormatInt(i2, 10), i2)
 	return true
-}
-
-func (i *IntType) HasValue() bool {
-	return i.hasVal
 }
 
 func (i *IntType) Type() string {
 	return "int"
 }
 
-func (i *IntType) Name() string {
-	return i.name
-}
-
-func (i *IntType) Constraint() interfaces.Constraint {
-	return i.constraint
-}
-
-func (i *IntType) SetConstraint(c interfaces.Constraint) {
-	i.constraint = c
-}
-
-func (i *IntType) Description() string {
-	descri := i.constraint.DescriptionStr()
-	if descri != nil {
-		return *descri
-	}
-	return i.name
-}
-
 var _ interfaces.Variable = &IntType{}
 
 func NewInt(name string) *IntType {
 	return &IntType{
-		name: name,
+		BaseType: BaseType{
+			name: name,
+		},
 	}
 }
