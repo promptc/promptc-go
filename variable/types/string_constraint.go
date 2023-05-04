@@ -6,10 +6,9 @@ import (
 )
 
 type StringConstraint struct {
-	MinLength   *int    `json:"minLen"`
-	MaxLength   *int    `json:"maxLen"`
-	Default     string  `json:"default"`
-	Description *string `json:"description"`
+	BaseConstraint
+	MinLength *int `json:"minLen"`
+	MaxLength *int `json:"maxLen"`
 }
 
 func (s *StringConstraint) CanFit(s2 string) bool {
@@ -32,10 +31,6 @@ func (s *StringConstraint) Validate() error {
 		return errors.New("min length cannot be greater than max length")
 	}
 	return nil
-}
-
-func (s *StringConstraint) DescriptionStr() *string {
-	return s.Description
 }
 
 var _ interfaces.Constraint = &StringConstraint{}

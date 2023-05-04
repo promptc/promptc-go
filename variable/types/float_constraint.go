@@ -7,10 +7,9 @@ import (
 )
 
 type FloatConstraint struct {
-	Min         *float64 `json:"min,omitempty"`
-	Max         *float64 `json:"max,omitempty"`
-	Default     string   `json:"default"`
-	Description string   `json:"description"`
+	BaseConstraint
+	Min *float64 `json:"min,omitempty"`
+	Max *float64 `json:"max,omitempty"`
 }
 
 func (i *FloatConstraint) CanFit(v string) bool {
@@ -36,10 +35,6 @@ func (i *FloatConstraint) Validate() error {
 		return errors.New("min cannot be greater than max")
 	}
 	return nil
-}
-
-func (i *FloatConstraint) DescriptionStr() *string {
-	return &i.Description
 }
 
 var _ interfaces.Constraint = &FloatConstraint{}
