@@ -25,8 +25,7 @@ type FileInfo struct {
 }
 
 type PromptC struct {
-	FileInfo
-	Conf          *Conf                          `json:"conf,omitempty"`
+	SharedInfo
 	Vars          map[string]string              `json:"vars"`
 	Prompts       []string                       `json:"prompts"`
 	VarConstraint map[string]interfaces.Variable `json:"-"`
@@ -45,6 +44,11 @@ func (f *PromptC) GetConf() Conf {
 	return *f.Conf
 }
 
+type SharedInfo struct {
+	FileInfo
+	Conf *Conf `json:"conf,omitempty"`
+}
+
 var reserved = []string{"conf", "prompts", "vars", "author", "license", "project", "version"}
 
 type CompiledPrompt struct {
@@ -53,9 +57,8 @@ type CompiledPrompt struct {
 }
 
 type CompiledPromptC struct {
+	SharedInfo
 	Fatal        bool
-	Info         FileInfo
-	Conf         *Conf
 	Prompts      []CompiledPrompt
 	CompiledVars map[string]string
 	Exceptions   []error

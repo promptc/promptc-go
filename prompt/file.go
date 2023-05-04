@@ -90,9 +90,11 @@ func ParseBasicPrompt(content string) *PromptC {
 		VarConstraint: make(map[string]interfaces.Variable),
 		Vars:          make(map[string]string),
 		Prompts:       []string{content},
-		Conf: &Conf{
-			Model:    "gpt-3.5-turbo",
-			Provider: "openai",
+		SharedInfo: SharedInfo{
+			Conf: &Conf{
+				Model:    "gpt-3.5-turbo",
+				Provider: "openai",
+			},
 		},
 	}
 
@@ -152,9 +154,8 @@ func (f *PromptC) Compile(vars map[string]string) *CompiledPromptC {
 	}
 compiled:
 	return &CompiledPromptC{
+		SharedInfo:   f.SharedInfo,
 		Fatal:        fileFatal,
-		Info:         f.FileInfo,
-		Conf:         f.Conf,
 		Prompts:      result,
 		CompiledVars: compiledVars,
 		Exceptions:   errs,
