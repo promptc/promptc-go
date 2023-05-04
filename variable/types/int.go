@@ -49,6 +49,14 @@ func (i *IntType) SetConstraint(c interfaces.Constraint) {
 	i.constraint = c
 }
 
+func (i *IntType) Description() string {
+	descri := i.constraint.DescriptionStr()
+	if descri != nil {
+		return *descri
+	}
+	return i.name
+}
+
 var _ interfaces.Variable = &IntType{}
 
 func NewInt(name string) *IntType {

@@ -58,6 +58,14 @@ func (i *FloatType) String() string {
 	return v
 }
 
+func (i *FloatType) Description() string {
+	descri := i.constraint.DescriptionStr()
+	if descri != nil {
+		return *descri
+	}
+	return i.name
+}
+
 var _ interfaces.Variable = &FloatType{}
 
 func NewFloat(name string) *FloatType {

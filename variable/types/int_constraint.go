@@ -7,9 +7,10 @@ import (
 )
 
 type IntConstraint struct {
-	Min     *int64 `json:"min,omitempty"`
-	Max     *int64 `json:"max,omitempty"`
-	Default string `json:"default"`
+	Min         *int64  `json:"min,omitempty"`
+	Max         *int64  `json:"max,omitempty"`
+	Default     string  `json:"default"`
+	Description *string `json:"description"`
 }
 
 func (i *IntConstraint) CanFit(v string) bool {
@@ -35,6 +36,10 @@ func (i *IntConstraint) Validate() error {
 		return errors.New("min cannot be greater than max")
 	}
 	return nil
+}
+
+func (i *IntConstraint) DescriptionStr() *string {
+	return i.Description
 }
 
 var _ interfaces.Constraint = &IntConstraint{}

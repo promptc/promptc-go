@@ -14,4 +14,5 @@ type Constraint interface {
 	CanFit(string) bool
 	String() string
 	Validate() error
+	DescriptionStr() *string
 }
