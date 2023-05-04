@@ -8,8 +8,8 @@ import (
 	"github.com/promptc/promptc-go/variable/interfaces"
 )
 
-func ParseFile(content string) *File {
-	file := &File{
+func ParsePromptC(content string) *PromptC {
+	file := &PromptC{
 		VarConstraint: make(map[string]interfaces.Variable),
 		Vars:          make(map[string]string),
 	}
@@ -53,7 +53,7 @@ func ParseFile(content string) *File {
 	return file
 }
 
-func (f *File) parseVariable() {
+func (f *PromptC) parseVariable() {
 	for k, v := range f.Vars {
 		parsed, err := variable.ParseKeyValue(k, v)
 		if parsed != nil {
@@ -66,7 +66,7 @@ func (f *File) parseVariable() {
 	}
 }
 
-func (f *File) parsePrompt() {
+func (f *PromptC) parsePrompt() {
 	for promptId, p := range f.Prompts {
 		block := &Block{
 			Text: p,
@@ -85,8 +85,8 @@ func (f *File) parsePrompt() {
 	}
 }
 
-func ParseUnstructuredFile(content string) *File {
-	file := &File{
+func ParsePrompt(content string) *PromptC {
+	file := &PromptC{
 		VarConstraint: make(map[string]interfaces.Variable),
 		Vars:          make(map[string]string),
 		Prompts:       []string{content},
@@ -101,7 +101,7 @@ func ParseUnstructuredFile(content string) *File {
 	return file
 }
 
-func (f *File) Compile(vars map[string]string) *CompiledFile {
+func (f *PromptC) Compile(vars map[string]string) *CompiledFile {
 	//varMap := make(map[string]string)
 	fileFatal := false
 	compiledVars := make(map[string]string)

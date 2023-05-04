@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-func (f *File) Combine() *File {
-	nf := File{
+func (f *PromptC) Combine() *PromptC {
+	nf := PromptC{
 		FileInfo: f.FileInfo,
 	}
 
@@ -25,7 +25,7 @@ func (f *File) Combine() *File {
 	return &nf
 }
 
-func (f *File) OldStyle() string {
+func (f *PromptC) OldStyle() string {
 	nf := f.Combine()
 	nf.parsePrompt()
 	sb := strings.Builder{}
@@ -68,7 +68,7 @@ func (f *File) OldStyle() string {
 	return strings.TrimSpace(sb.String())
 }
 
-func (f *File) Formatted() string {
+func (f *PromptC) Formatted() string {
 	nf := f.Combine()
 	return utils.HjsonNoBrace(nf)
 
@@ -120,7 +120,7 @@ func (r *ReferBlock) Formatted(prov provider.Privider) []string {
 	if err != nil {
 		return nil
 	}
-	prompt := ParseUnstructuredFile(promptTxt)
+	prompt := ParsePrompt(promptTxt)
 	prompt.RefProvider = r.RefProvider
 	for _, block := range prompt.ParsedPrompt {
 		block.Tokens = TxTokens(block.Tokens, varMoveTx, vatToLiterTx)

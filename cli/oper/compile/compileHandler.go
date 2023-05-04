@@ -46,7 +46,7 @@ func CompileHandler(args []string) {
 		fmt.Println(k, ":", v)
 	}
 
-	file := prompt.ParseFile(string(promptBs))
+	file := prompt.ParsePromptC(string(promptBs))
 	file.RefProvider = &provider.FileProvider{
 		BasePath: filepath.Dir(promptPath),
 	}

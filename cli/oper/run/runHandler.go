@@ -30,7 +30,7 @@ func RunHandler(args []string) {
 	}
 
 	varMap := shared.IniToMap(varStr)
-	file := prompt.ParseFile(promptStr)
+	file := prompt.ParsePromptC(promptStr)
 	file.RefProvider = &ptProvider.FileProvider{
 		BasePath: filepath.Dir(promptPath),
 	}

@@ -20,7 +20,7 @@ func FormatHandler(args []string) {
 	if err != nil {
 		panic(err)
 	}
-	file := prompt.ParseFile(fileStr)
+	file := prompt.ParsePromptC(fileStr)
 	file.RefProvider = &ptProvider.FileProvider{
 		BasePath: filepath.Dir(input),
 	}
@@ -40,7 +40,7 @@ func OldStyleFormatHandler(args []string) {
 	if err != nil {
 		panic(err)
 	}
-	file := prompt.ParseFile(fileStr)
+	file := prompt.ParsePromptC(fileStr)
 	file.RefProvider = &ptProvider.FileProvider{
 		BasePath: filepath.Dir(input),
 	}

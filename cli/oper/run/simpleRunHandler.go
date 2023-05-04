@@ -29,11 +29,11 @@ func SimpleRunHandler(args []string) {
 	if err != nil {
 		panic(err)
 	}
-	var file *prompt.File
+	var file *prompt.PromptC
 	if structured {
-		file = prompt.ParseFile(txt)
+		file = prompt.ParsePromptC(txt)
 	} else {
-		file = prompt.ParseUnstructuredFile(txt)
+		file = prompt.ParsePrompt(txt)
 	}
 	file.RefProvider = &ptProvider.FileProvider{
 		BasePath: filepath.Dir(path),

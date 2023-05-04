@@ -23,7 +23,7 @@ type FileInfo struct {
 	Version string `json:"version,omitempty"`
 }
 
-type File struct {
+type PromptC struct {
 	FileInfo
 	Conf          *Conf                          `json:"conf,omitempty"`
 	Vars          map[string]string              `json:"vars"`
@@ -34,7 +34,7 @@ type File struct {
 	RefProvider   provider.Privider              `json:"-"`
 }
 
-func (f *File) GetConf() Conf {
+func (f *PromptC) GetConf() Conf {
 	if f.Conf == nil {
 		return Conf{
 			Provider: "openai",

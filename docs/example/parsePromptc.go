@@ -6,8 +6,8 @@ import (
 )
 
 func ParsePromptc(promptc string) {
-	var file *prompt.File
-	file = prompt.ParseFile(promptc)
+	var file *prompt.PromptC
+	file = prompt.ParsePromptC(promptc)
 
 	// get prompt info
 	info := file.FileInfo
@@ -20,7 +20,7 @@ func ParsePromptc(promptc string) {
 	// get vars
 	vars := file.Vars
 	fmt.Println(vars)
-	
+
 	// get var constraints
 	varConstraints := file.VarConstraint
 	fmt.Println(varConstraints)

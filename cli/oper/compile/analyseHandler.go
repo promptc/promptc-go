@@ -25,11 +25,11 @@ func AnalyseHandler(args []string) {
 		panic(err)
 	}
 
-	file := prompt.ParseFile(string(promptBs))
+	file := prompt.ParsePromptC(string(promptBs))
 	analyseFile(file)
 }
 
-func analyseFile(f *prompt.File) {
+func analyseFile(f *prompt.PromptC) {
 	if f == nil {
 		shared.ErrorF("File is nil")
 		return
