@@ -57,7 +57,7 @@ func runGPT(drv interfaces.ProviderDriver, userInput []string, gptInput []string
 			prmpt = append(prmpt, models.PromptItem{
 				Content: gptInput[i],
 				Extra: map[string]any{
-					"role": "system",
+					"role": "assistant",
 				},
 			})
 		}
