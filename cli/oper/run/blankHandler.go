@@ -15,7 +15,7 @@ func BlankHandler(args []string) {
 		fmt.Println("Usage: promptc-cli blank [prompt]")
 		return
 	}
-	providerDriver := driver.GetDefaultDriver(cfg.GetCfg().GetToken("openai"))
+	providerDriver := driver.GetOpenAIDriver(cfg.GetCfg().DefaultProvider, cfg.GetCfg().OpenAIToken)
 	toSend := models.PromptToSend{
 		Items: []models.PromptItem{
 			{

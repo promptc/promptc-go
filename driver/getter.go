@@ -23,3 +23,7 @@ func GetDriver(provider, model, token string) (interfaces.ProviderDriver, error)
 func GetDefaultDriver(token string) interfaces.ProviderDriver {
 	return chatgpt_driver.NewWithProvider(token, "openai")
 }
+
+func GetOpenAIDriver(provider, token string) interfaces.ProviderDriver {
+	return chatgpt_driver.NewWithProvider(token, provider)
+}

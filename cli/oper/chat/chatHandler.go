@@ -29,7 +29,7 @@ func ChatHandler(args []string) {
 	if err != nil {
 		panic(err)
 	}
-	providerDriver := driver.GetDefaultDriver(cfg.GetCfg().GetToken("openai"))
+	providerDriver := driver.GetOpenAIDriver(cfg.GetCfg().DefaultProvider, cfg.GetCfg().OpenAIToken)
 	for {
 		line, err := rl.Readline()
 		if err != nil {

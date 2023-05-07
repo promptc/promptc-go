@@ -8,7 +8,8 @@ import (
 )
 
 type Model struct {
-	OpenAIToken string `json:"openai_token"`
+	OpenAIToken     string `json:"openai_token"`
+	DefaultProvider string `json:"default_provider,default=openai"`
 }
 
 var model *Model
@@ -28,6 +29,8 @@ func (m *Model) GetToken(name string) string {
 	switch name {
 	case "openai":
 		return m.OpenAIToken
+	case "provider":
+		return m.DefaultProvider
 	}
 	return ""
 }
