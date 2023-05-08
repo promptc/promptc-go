@@ -58,7 +58,8 @@ func typeFactory(varType string, name string) interfaces.Variable {
 	case "float":
 		return types.NewFloat(name)
 	default:
-		return nil
+		// FIXME: cannot parse this type!
+		return types.NewString(name)
 	}
 }
 

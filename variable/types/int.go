@@ -7,7 +7,6 @@ import (
 
 type IntType struct {
 	BaseType
-	value int64
 }
 
 func (i *IntType) SetValue(s string) bool {

@@ -6,10 +6,7 @@ import (
 
 type StringType struct {
 	BaseType
-	name       string
-	constraint interfaces.Constraint
-	value      string
-	hasVal     bool
+	name string
 }
 
 func (s *StringType) SetValue(s2 string) bool {

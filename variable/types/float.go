@@ -8,7 +8,6 @@ import (
 
 type FloatType struct {
 	BaseType
-	value float64
 }
 
 func (i *FloatType) SetValue(s string) bool {
