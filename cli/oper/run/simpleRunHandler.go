@@ -50,7 +50,7 @@ func SimpleRunHandler(args []string) {
 			}
 			varMap[k] = input
 		}
-		panic("Too many vars")
+		//panic("Too many vars")
 	}
 	if len(file.Vars) == 1 {
 		for k, _ := range file.Vars {
