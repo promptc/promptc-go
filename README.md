@@ -62,7 +62,7 @@ vars: {
     y: int {min: 0, max: 10}
     z: int {min: 0, max: 10, default: '5'}
 }
-// [Optional] wild way to define var
+// [Optional] Birmingham-style define var
 a: int {min: 0, max: 10}
 
 // [Required] define prompts
