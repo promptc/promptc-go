@@ -42,8 +42,8 @@ func SimpleRunHandler(args []string) {
 	varMap := make(map[string]string)
 	if len(file.Vars) > 1 || (len(inputs) == 0 && len(file.Vars) > 0) {
 		fmt.Println("Please enter following vars:")
-		for k, v := range file.Vars {
-			fmt.Print(k, " (", v, "): ")
+		for k, v := range file.VarConstraint {
+			fmt.Print(k, " (", v.Type(), "): ")
 			input, err := console.ReadLine()
 			if err != nil {
 				panic(err)
@@ -51,8 +51,7 @@ func SimpleRunHandler(args []string) {
 			varMap[k] = input
 		}
 		//panic("Too many vars")
-	}
-	if len(file.Vars) == 1 {
+	} else if len(file.Vars) == 1 {
 		for k, _ := range file.Vars {
 			varMap[k] = input
 		}
@@ -70,6 +69,9 @@ func SimpleRunHandler(args []string) {
 	printSep()
 	printInfo(file.FileInfo)
 	printSep()
+	for k, v := range varMap {
+		fmt.Println("VAR.", k, " -> ", v)
+	}
 	compiled := file.Compile(varMap)
 	fmt.Println("Compiled To: ")
 	for i, c := range compiled.Prompts {

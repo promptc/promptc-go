@@ -9,6 +9,7 @@ import (
 
 type Model struct {
 	OpenAIToken     string `json:"openai_token"`
+	OpenAIProvider  string `json:"openai_provider"`
 	DefaultProvider string `json:"default_provider,default=openai"`
 }
 
