@@ -33,4 +33,15 @@ func (s *StringConstraint) Validate() error {
 	return nil
 }
 
+func (s *StringConstraint) ToMap() map[string]any {
+	m := s.BaseConstraint.ToMap()
+	if s.MinLength != nil {
+		m["minLen"] = *s.MinLength
+	}
+	if s.MaxLength != nil {
+		m["maxLen"] = *s.MaxLength
+	}
+	return m
+}
+
 var _ interfaces.Constraint = &StringConstraint{}

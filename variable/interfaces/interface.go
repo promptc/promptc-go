@@ -15,4 +15,5 @@ type Constraint interface {
 	String() string
 	Validate() error
 	DescriptionStr() *string
+	ToMap() map[string]any
 }

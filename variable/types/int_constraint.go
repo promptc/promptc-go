@@ -37,4 +37,15 @@ func (i *IntConstraint) Validate() error {
 	return nil
 }
 
+func (i *IntConstraint) ToMap() map[string]any {
+	m := i.BaseConstraint.ToMap()
+	if i.Min != nil {
+		m["min"] = *i.Min
+	}
+	if i.Max != nil {
+		m["max"] = *i.Max
+	}
+	return m
+}
+
 var _ interfaces.Constraint = &IntConstraint{}

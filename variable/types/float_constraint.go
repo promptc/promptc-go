@@ -37,4 +37,15 @@ func (i *FloatConstraint) Validate() error {
 	return nil
 }
 
+func (i *FloatConstraint) ToMap() map[string]any {
+	m := i.BaseConstraint.ToMap()
+	if i.Min != nil {
+		m["min"] = *i.Min
+	}
+	if i.Max != nil {
+		m["max"] = *i.Max
+	}
+	return m
+}
+
 var _ interfaces.Constraint = &FloatConstraint{}

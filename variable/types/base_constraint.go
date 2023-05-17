@@ -8,3 +8,10 @@ type BaseConstraint struct {
 func (b *BaseConstraint) DescriptionStr() *string {
 	return &b.Description
 }
+
+func (b *BaseConstraint) ToMap() map[string]any {
+	m := make(map[string]any)
+	m["default"] = b.Default
+	m["description"] = b.Description
+	return m
+}

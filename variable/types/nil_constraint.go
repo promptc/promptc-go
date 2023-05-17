@@ -21,4 +21,9 @@ func (c *NilConstraint) DescriptionStr() *string {
 	return nil
 }
 
+func (c *NilConstraint) ToMap() map[string]any {
+	m := make(map[string]any)
+	return m
+}
+
 var _ interfaces.Constraint = &NilConstraint{}
