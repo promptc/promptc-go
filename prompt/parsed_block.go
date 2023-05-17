@@ -52,8 +52,10 @@ func (p *ParsedBlock) ToMap() map[string]any {
 	m["extra"] = p.Extra
 	return m
 }
-
 func (p *ParsedBlock) Compile(varMap map[string]string) (compiled string, exceptions []error, fatal bool) {
+	return p.CompileWithOption(varMap, true)
+}
+func (p *ParsedBlock) CompileWithOption(varMap map[string]string, allowScript bool) (compiled string, exceptions []error, fatal bool) {
 	fatal = false
 	sb := strings.Builder{}
 	vm := otto.New()
@@ -91,6 +93,11 @@ func (p *ParsedBlock) Compile(varMap map[string]string) (compiled string, except
 		case BlockTokenKindReservedQuota:
 			sb.WriteString("'''")
 		case BlockTokenKindScript:
+			if !allowScript {
+				exceptions = append(exceptions, errors.New("script is not allowed"))
+				fatal = true
+				return
+			}
 			script := token.Text
 			easyMod := false
 			if strings.HasPrefix(script, "E") {

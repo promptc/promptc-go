@@ -104,6 +104,10 @@ func ParseBasicPrompt(content string) *PromptC {
 }
 
 func (f *PromptC) Compile(vars map[string]string) *CompiledPromptC {
+	return f.CompileWithOption(vars, true)
+}
+
+func (f *PromptC) CompileWithOption(vars map[string]string, allowScript bool) *CompiledPromptC {
 	//varMap := make(map[string]string)
 	fileFatal := false
 	compiledVars := make(map[string]string)
@@ -139,7 +143,7 @@ func (f *PromptC) Compile(vars map[string]string) *CompiledPromptC {
 			result = append(result, compiled...)
 			continue
 		}
-		compiled, exp, fatal := p.Compile(compiledVars)
+		compiled, exp, fatal := p.CompileWithOption(compiledVars, allowScript)
 		if len(exp) > 0 {
 			errs = append(errs, exp...)
 		}
