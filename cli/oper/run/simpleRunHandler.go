@@ -2,6 +2,9 @@ package run
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
+
 	"github.com/KevinZonda/GoX/pkg/console"
 	"github.com/KevinZonda/GoX/pkg/iox"
 	"github.com/promptc/promptc-go/cli/oper/cfg"
@@ -11,24 +14,31 @@ import (
 	"github.com/promptc/promptc-go/prompt"
 	ptProvider "github.com/promptc/promptc-go/prompt/provider"
 	"github.com/promptc/promptc-go/utils"
-	"path/filepath"
-	"strings"
 )
 
+// SimpleRunHandler handles a command line prompt with input variables.
+//
+// args: a slice of string arguments passed to the program.
+// It expects at least one argument, the path to a promptc file.
+//
+// Returns nothing.
 func SimpleRunHandler(args []string) {
 	if len(args) < 1 {
 		panic("Usage: promptc-cli [prompt-file] [input?]")
 	}
+
 	path := args[0]
-	input := ""
 	inputs := args[1:]
+	var input string
 	if len(args) == 2 {
 		input = args[1]
 	}
+
 	txt, structured, err := fetchFile(path)
 	if err != nil {
 		panic(err)
 	}
+
 	var file *prompt.PromptC
 	if structured {
 		file = prompt.ParsePromptC(txt)
@@ -41,7 +51,7 @@ func SimpleRunHandler(args []string) {
 
 	varMap := make(map[string]string)
 	if len(file.Vars) > 1 || (len(inputs) == 0 && len(file.Vars) > 0) {
-		fmt.Println("Please enter following vars:")
+		fmt.Println("Please enter the following variables:")
 		for k, v := range file.Vars {
 			fmt.Print(k, " (", v, "): ")
 			input, err := console.ReadLine()
@@ -50,10 +60,10 @@ func SimpleRunHandler(args []string) {
 			}
 			varMap[k] = input
 		}
-		//panic("Too many vars")
 	}
+
 	if len(file.Vars) == 1 {
-		for k, _ := range file.Vars {
+		for k := range file.Vars {
 			varMap[k] = input
 		}
 	} else {
@@ -67,15 +77,19 @@ func SimpleRunHandler(args []string) {
 		})
 		file.Prompts[len(file.Prompts)-1] += " " + strings.Join(inputs, " ")
 	}
+
 	printSep()
 	printInfo(file.FileInfo)
 	printSep()
+
 	compiled := file.Compile(varMap)
-	fmt.Println("Compiled To: ")
+
+	fmt.Println("Compiled to:")
 	for i, c := range compiled.Prompts {
 		shared.InfoF("Prompt #%d [%s]: ", i, utils.HjsonNoIdent(c.Extra))
 		fmt.Println(c.Prompt)
 	}
+
 	if len(compiled.Exceptions) > 0 {
 		printSep()
 		shared.ErrorF("Compiled Exceptions: ")
@@ -95,11 +109,13 @@ func SimpleRunHandler(args []string) {
 	for _, c := range compiled.Prompts {
 		items = append(items, convCompiledToSend(c))
 	}
+
 	toSend := models.PromptToSend{
 		Items: items,
 		Conf:  file.GetConf(),
 		Extra: nil,
 	}
+
 	printSep()
 	shared.RunPrompt(providerDriver, toSend, shared.DefaultResponseBefore)
 }
@@ -108,30 +124,30 @@ func printSep() {
 	fmt.Println("================")
 }
 
-func printInfo(f prompt.FileInfo) {
-	sb := strings.Builder{}
-	if f.Project != "" {
-		sb.WriteString("Project: ")
-		sb.WriteString(f.Project)
-		sb.WriteString("\n")
+func printInfo(fileInfo prompt.FileInfo) {
+	var builder strings.Builder
+	if fileInfo.Project != "" {
+		builder.WriteString("Project: ")
+		builder.WriteString(fileInfo.Project)
+		builder.WriteString("\n")
 	}
-	if f.Version != "" {
-		sb.WriteString("Version: ")
-		sb.WriteString(f.Version)
-		sb.WriteString("\n")
+	if fileInfo.Version != "" {
+		builder.WriteString("Version: ")
+		builder.WriteString(fileInfo.Version)
+		builder.WriteString("\n")
 	}
-	if f.Author != "" {
-		sb.WriteString("Author: ")
-		sb.WriteString(f.Author)
-		sb.WriteString("\n")
+	if fileInfo.Author != "" {
+		builder.WriteString("Author: ")
+		builder.WriteString(fileInfo.Author)
+		builder.WriteString("\n")
 	}
-	if f.License != "" {
-		sb.WriteString("License: ")
-		sb.WriteString(f.License)
-		sb.WriteString("\n")
+	if fileInfo.License != "" {
+		builder.WriteString("License: ")
+		builder.WriteString(fileInfo.License)
+		builder.WriteString("\n")
 	}
-	if sb.Len() > 0 {
-		fmt.Print(sb.String())
+	if builder.Len() > 0 {
+		fmt.Print(builder.String())
 	} else {
 		fmt.Println("No info provided by prompt file")
 	}

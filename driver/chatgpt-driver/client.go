@@ -20,6 +20,9 @@ func New(token string) *ChatGPTDriver {
 	return NewWithProvider(token, "openai")
 }
 
+// factoryRequest returns an openai.ChatCompletionRequest object based on the provided prompt.
+//
+// Takes in a models.PromptToSend object as a parameter and returns an openai.ChatCompletionRequest object.
 func factoryRequest(p models.PromptToSend) openai.ChatCompletionRequest {
 	req := openai.ChatCompletionRequest{
 		Model:    p.Conf.Model,
@@ -34,31 +37,29 @@ func factoryRequest(p models.PromptToSend) openai.ChatCompletionRequest {
 	return req
 }
 
+// getMessages returns a list of chat messages to send using OpenAI API.
+//
+// It takes a `models.PromptToSend` struct as its only parameter, with the prompt
+// items (strings) and their respective `extra` keys to determine their role.
+// The function returns a slice of `openai.ChatCompletionMessage` structs
+// containing the role and content of each prompt.
 func getMessages(p models.PromptToSend) []openai.ChatCompletionMessage {
-	var message []openai.ChatCompletionMessage
-	for _, _p := range p.Items {
-		if _p.Content == "" {
+	var messages []openai.ChatCompletionMessage
+	for _, item := range p.Items {
+		if item.Content == "" {
 			continue
 		}
 
 		role := "user"
-		if len(_p.Extra) > 0 {
-			ok := false
-			var a any
-			a, ok = _p.Extra["role"]
-			if ok {
-				role, ok = a.(string)
-				if !ok {
-					role = "user"
-				}
-			}
+		if extra, ok := item.Extra["role"].(string); ok {
+			role = extra
 		}
 
-		content := openai.ChatCompletionMessage{
+		msg := openai.ChatCompletionMessage{
 			Role:    role,
-			Content: _p.Content,
+			Content: item.Content,
 		}
-		message = append(message, content)
+		messages = append(messages, msg)
 	}
-	return message
+	return messages
 }

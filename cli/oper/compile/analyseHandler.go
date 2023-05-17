@@ -2,30 +2,40 @@ package compile
 
 import (
 	"fmt"
-	"github.com/KevinZonda/GoX/pkg/console"
-	"github.com/promptc/promptc-go/cli/oper/shared"
-	"github.com/promptc/promptc-go/prompt"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/KevinZonda/GoX/pkg/console"
+	"github.com/promptc/promptc-go/cli/oper/shared"
+	"github.com/promptc/promptc-go/prompt"
 )
 
+// AnalyzeHandler handles the analysis of a prompt file.
+//
+// args: a slice of strings representing the command line arguments.
+// It should contain only one element, which is the path to the prompt file.
+//
+// Returns nothing.
 func AnalyseHandler(args []string) {
 	if len(args) != 1 {
-		fmt.Println("Usage: promptc-cli analyse [prompt-file]")
+		fmt.Println("Usage: promptc-cli analyze [prompt-file]")
 		return
 	}
+
 	promptPath := args[0]
-	promptF, err := os.Open(promptPath)
+	promptFile, err := os.Open(promptPath)
 	if err != nil {
 		panic(err)
 	}
-	promptBs, err := io.ReadAll(promptF)
+	defer promptFile.Close()
+
+	promptContent, err := io.ReadAll(promptFile)
 	if err != nil {
 		panic(err)
 	}
 
-	file := prompt.ParsePromptC(string(promptBs))
+	file := prompt.ParsePromptC(string(promptContent))
 	analyseFile(file)
 }
 
@@ -45,6 +55,10 @@ func analyseFile(f *prompt.PromptC) {
 	}
 }
 
+// analyse processes a Prompt block and prints information about its tokens,
+// variables, and extra values.
+//
+// p: a pointer to a Prompt.ParsedBlock struct
 func analyse(p *prompt.ParsedBlock) {
 	shared.InfoF("Vars in Prompt Block: ")
 	for i, v := range p.VarList {

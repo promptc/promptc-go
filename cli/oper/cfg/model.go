@@ -1,10 +1,11 @@
 package cfg
 
 import (
-	"github.com/hjson/hjson-go/v4"
-	"github.com/promptc/promptc-go/cli/oper/shared"
 	"io"
 	"os"
+
+	"github.com/hjson/hjson-go/v4"
+	"github.com/promptc/promptc-go/cli/oper/shared"
 )
 
 type Model struct {
@@ -65,7 +66,6 @@ func GetCfg() *Model {
 				panic(err)
 			}
 		}
-
 	}
 	return model
 }
