@@ -2,8 +2,8 @@ package run
 
 import (
 	"fmt"
-	"github.com/KevinZonda/GoX/pkg/console"
 	"github.com/KevinZonda/GoX/pkg/iox"
+	"github.com/chzyer/readline"
 	"github.com/promptc/promptc-go/cli/oper/cfg"
 	"github.com/promptc/promptc-go/cli/oper/shared"
 	"github.com/promptc/promptc-go/driver"
@@ -43,8 +43,7 @@ func SimpleRunHandler(args []string) {
 	if len(file.Vars) > 1 || (len(inputs) == 0 && len(file.Vars) > 0) {
 		fmt.Println("Please enter following vars:")
 		for k, v := range file.VarConstraint {
-			fmt.Print(k, " (", v.Type(), "): ")
-			input, err := console.ReadLine()
+			input, err := readline.Line(k + " (" + v.Type() + "): ")
 			if err != nil {
 				panic(err)
 			}

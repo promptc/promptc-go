@@ -59,7 +59,9 @@ func typeFactory(varType string, name string) interfaces.Variable {
 		return types.NewFloat(name)
 	default:
 		// FIXME: cannot parse this type!
-		return types.NewString(name)
+		v := types.NewString(name)
+		v.SetValue(varType)
+		return v
 	}
 }
 
