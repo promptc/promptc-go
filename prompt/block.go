@@ -91,7 +91,7 @@ func (b *Block) Parse() *ParsedBlock {
 			if isOpen {
 				kind := BlockTokenKindVar
 				if isScriptOpen {
-					if prev == '%' {
+					if prev == '%' && !strings.HasSuffix(strings.Replace(sb.String(), " ", "", -1), "{%Q%") {
 						isScriptOpen = false
 						kind = BlockTokenKindScript
 					} else {

@@ -26,6 +26,17 @@ MM {{}} {{{x}}} {%
 	printBlock(parsed)
 }
 
+func TestSpecialParser(t *testing.T) {
+	text := `{{%Q%}}
+{% {% Q %} %}`
+	block := Block{
+		Text: text,
+	}
+	fmt.Println("origin:", text)
+	parsed := block.Parse()
+	printBlock(parsed)
+}
+
 func printTokens(tokens []BlockToken) {
 	for _, t := range tokens {
 		fmt.Printf("%#v\n", t)
