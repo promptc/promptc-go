@@ -60,6 +60,7 @@ func typeFactory(varType string, name string) interfaces.Variable {
 	default:
 		// FIXME: cannot parse this type!
 		v := types.NewString(name)
+		v.SetConstraint(&types.NilConstraint{})
 		v.SetValue(varType)
 		return v
 	}
